@@ -1,9 +1,3 @@
-/**
-COMP4321 Lab2 Exercise
-Student name:
-Student ID:
-ITSC:
-*/
 
 import java.util.*;
 import org.jsoup.Jsoup;
@@ -24,7 +18,8 @@ import org.rocksdb.Options;
 import org.rocksdb.RocksDBException;  
 import org.rocksdb.RocksIterator;
 
-/** The data structure for the crawling URLqueue.
+/*
+ * The data structure for the crawling URLqueue.
  */
 class Link{
 	String url;
@@ -36,7 +31,8 @@ class Link{
 }
 
 @SuppressWarnings("serial")
-/** This is customized exception for those pages that have been visited before.
+/*
+ *  This is customized exception for those pages that have been visited before.
  */
 class RevisitException 
 	extends RuntimeException {
@@ -56,7 +52,7 @@ public class Crawler {
 		this.urls = new HashSet<String>();
 	}
 
-	/**
+	/*
 	 * Send an HTTP request and analyze the response.
 	 * @return {Response} res
 	 * @throws HttpStatusException for non-existing pages
@@ -110,7 +106,8 @@ public class Crawler {
 		return res;
 	}
 
-	/** Extract words in the web page content.
+	/*
+	 * Extract words in the web page content.
 	 * note: use StringTokenizer to tokenize the result
 	 * @param {Document} doc
 	 * @return {Vector<String>} a list of words in the web page body
@@ -126,7 +123,8 @@ public class Crawler {
 	     return result;		
 	}
 	
-	/** Extract useful external urls on the web page.
+	/*
+	 * Extract useful external urls on the web page.
 	 * note: filter out images, emails, etc.
 	 * @param {Document} doc
 	 * @return {Vector<String>} a list of external links on the web page
@@ -147,7 +145,8 @@ public class Crawler {
         return result;
 	}
 	
-	/** Print all info about the focused page to console
+	/*
+	 *  Print all info about the focused page to console
 	 */
 	public void printPageInfo(Response res, Document doc, Link focus) {
 		System.out.println("Page title: " + doc.title());
@@ -156,7 +155,8 @@ public class Crawler {
 		System.out.printf("Page Size: %d Bytes\n", res.bodyAsBytes().length);
 	}
 	
-	/** Print page's words and links
+	/*
+	 * Print page's words and links
 	 */
 	public void printWordsAndLinks(Link focus, Set<Entry<String, Integer>> keywordFreqPair, Vector<String> links) {	
 		System.out.println("\nWords:");
@@ -242,6 +242,9 @@ public class Crawler {
 		
 	}
 	
+	/*
+	 * Inverted Indexing
+	 */
 	public void invertedIndexing(String url, Set<Entry<String, Integer>> keywordFreqPair, InvertedIndex index) {
         for (Entry<String, Integer> entry : keywordFreqPair) {
 			try {
@@ -253,6 +256,9 @@ public class Crawler {
         }
 	}
 	
+	/*
+	 * Document Mapping
+	 */
 	public void docMapping(Vector<String> links,InvertedIndex index){
 		for(String url: links) {
 			try {
@@ -265,6 +271,9 @@ public class Crawler {
 		}
 	}
 	
+	/*
+	 * Word Mapping
+	 */
 	public void wordMapping(Vector<String> words, InvertedIndex index) {
 		for(String word: words) {
 			try {
@@ -277,6 +286,9 @@ public class Crawler {
 		}
 	}
 	
+	/*
+	 * Add Linkage 
+	 */
 	public void parentChild(String p_url,Vector<String> children, InvertedIndex index) {
 		for(String child_url: children) {
 			try {
@@ -288,7 +300,8 @@ public class Crawler {
 		}
 	}
 	
-	/** initialize Set with Entry<keyword, frequency>
+	/*
+	 * Forward Indexing
 	 */
 	public Set<Entry<String, Integer>> forwardIndex(String url, Vector<String> words, InvertedIndex index) {
 		//forward_docID -> (word, freq)
@@ -374,7 +387,7 @@ public class Crawler {
 		}
 		return result;
 	}
-
+	
 	public void outputTXT(String content){
 		try {
 		    BufferedWriter writer = new BufferedWriter(new FileWriter("./spider_result.txt"));

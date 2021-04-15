@@ -41,3 +41,136 @@ NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED -
 15-Apr-2021 22:51:22.630 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/comp4321-project/apache-tomcat-10.0.5/webapps/host-manager] has finished in [31] ms
 15-Apr-2021 22:51:22.636 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
 15-Apr-2021 22:51:22.649 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [766] milliseconds
+NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+15-Apr-2021 23:43:11.306 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.0.5
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2021 08:19:50 UTC
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.0.5.0
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.16
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           11.0.10+9
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            AdoptOpenJDK
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+15-Apr-2021 23:43:11.309 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+15-Apr-2021 23:43:11.333 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+15-Apr-2021 23:43:11.333 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+15-Apr-2021 23:43:11.333 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+15-Apr-2021 23:43:11.333 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+15-Apr-2021 23:43:11.333 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+15-Apr-2021 23:43:11.333 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/conf/logging.properties
+15-Apr-2021 23:43:11.334 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+15-Apr-2021 23:43:11.334 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+15-Apr-2021 23:43:11.334 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+15-Apr-2021 23:43:11.334 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dorg.apache.catalina.security.SecurityListener.UMASK=0027
+15-Apr-2021 23:43:11.334 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+15-Apr-2021 23:43:11.334 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+15-Apr-2021 23:43:11.334 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+15-Apr-2021 23:43:11.334 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/temp
+15-Apr-2021 23:43:11.338 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The Apache Tomcat Native library which allows using OpenSSL was not found on the java.library.path: [/Users/anthonykwok/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
+15-Apr-2021 23:43:11.588 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+15-Apr-2021 23:43:11.608 SEVERE [main] org.apache.catalina.util.LifecycleBase.handleSubClassException Failed to initialize component [Connector[HTTP/1.1-8080]]
+	org.apache.catalina.LifecycleException: Protocol handler initialization failed
+		at org.apache.catalina.connector.Connector.initInternal(Connector.java:1054)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:136)
+		at org.apache.catalina.core.StandardService.initInternal(StandardService.java:556)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:136)
+		at org.apache.catalina.core.StandardServer.initInternal(StandardServer.java:1045)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:136)
+		at org.apache.catalina.startup.Catalina.load(Catalina.java:747)
+		at org.apache.catalina.startup.Catalina.load(Catalina.java:769)
+		at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+		at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+		at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+		at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+		at org.apache.catalina.startup.Bootstrap.load(Bootstrap.java:302)
+		at org.apache.catalina.startup.Bootstrap.main(Bootstrap.java:472)
+	Caused by: java.net.BindException: Address already in use
+		at java.base/sun.nio.ch.Net.bind0(Native Method)
+		at java.base/sun.nio.ch.Net.bind(Net.java:455)
+		at java.base/sun.nio.ch.Net.bind(Net.java:447)
+		at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:227)
+		at org.apache.tomcat.util.net.NioEndpoint.initServerSocket(NioEndpoint.java:243)
+		at org.apache.tomcat.util.net.NioEndpoint.bind(NioEndpoint.java:198)
+		at org.apache.tomcat.util.net.AbstractEndpoint.bindWithCleanup(AbstractEndpoint.java:1175)
+		at org.apache.tomcat.util.net.AbstractEndpoint.init(AbstractEndpoint.java:1188)
+		at org.apache.coyote.AbstractProtocol.init(AbstractProtocol.java:580)
+		at org.apache.coyote.http11.AbstractHttp11Protocol.init(AbstractHttp11Protocol.java:82)
+		at org.apache.catalina.connector.Connector.initInternal(Connector.java:1051)
+		... 13 more
+15-Apr-2021 23:43:11.609 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [487] milliseconds
+15-Apr-2021 23:43:11.656 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+15-Apr-2021 23:43:11.656 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.0.5]
+15-Apr-2021 23:43:11.663 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/docs]
+15-Apr-2021 23:43:11.907 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/docs] has finished in [245] ms
+15-Apr-2021 23:43:11.908 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/manager]
+15-Apr-2021 23:43:11.949 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/manager] has finished in [41] ms
+15-Apr-2021 23:43:11.950 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/examples]
+15-Apr-2021 23:43:12.202 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/examples] has finished in [252] ms
+15-Apr-2021 23:43:12.202 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/ROOT]
+15-Apr-2021 23:43:12.218 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/ROOT] has finished in [16] ms
+15-Apr-2021 23:43:12.218 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/host-manager]
+15-Apr-2021 23:43:12.244 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/host-manager] has finished in [26] ms
+15-Apr-2021 23:43:12.247 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [637] milliseconds
+15-Apr-2021 23:43:12.251 SEVERE [main] org.apache.catalina.core.StandardServer.await Failed to create server shutdown socket on address [localhost] and port [8005] (base port [8005] and offset [0])
+	java.net.BindException: Address already in use (Bind failed)
+		at java.base/java.net.PlainSocketImpl.socketBind(Native Method)
+		at java.base/java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:436)
+		at java.base/java.net.ServerSocket.bind(ServerSocket.java:395)
+		at java.base/java.net.ServerSocket.<init>(ServerSocket.java:257)
+		at org.apache.catalina.core.StandardServer.await(StandardServer.java:584)
+		at org.apache.catalina.startup.Catalina.await(Catalina.java:887)
+		at org.apache.catalina.startup.Catalina.start(Catalina.java:833)
+		at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+		at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+		at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+		at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+		at org.apache.catalina.startup.Bootstrap.start(Bootstrap.java:342)
+		at org.apache.catalina.startup.Bootstrap.main(Bootstrap.java:473)
+15-Apr-2021 23:43:12.251 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+15-Apr-2021 23:43:12.251 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+15-Apr-2021 23:43:12.277 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+15-Apr-2021 23:43:12.279 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+15-Apr-2021 23:46:16.494 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.0.5
+15-Apr-2021 23:46:16.516 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2021 08:19:50 UTC
+15-Apr-2021 23:46:16.517 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.0.5.0
+15-Apr-2021 23:46:16.517 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+15-Apr-2021 23:46:16.517 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.16
+15-Apr-2021 23:46:16.517 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+15-Apr-2021 23:46:16.518 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+15-Apr-2021 23:46:16.518 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           11.0.10+9
+15-Apr-2021 23:46:16.518 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            AdoptOpenJDK
+15-Apr-2021 23:46:16.518 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+15-Apr-2021 23:46:16.518 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+15-Apr-2021 23:46:16.522 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+15-Apr-2021 23:46:16.537 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+15-Apr-2021 23:46:16.537 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/conf/logging.properties
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dorg.apache.catalina.security.SecurityListener.UMASK=0027
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+15-Apr-2021 23:46:16.538 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/temp
+15-Apr-2021 23:46:16.540 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The Apache Tomcat Native library which allows using OpenSSL was not found on the java.library.path: [/Users/anthonykwok/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
+15-Apr-2021 23:46:16.837 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+15-Apr-2021 23:46:16.877 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [594] milliseconds
+15-Apr-2021 23:46:16.930 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+15-Apr-2021 23:46:16.931 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.0.5]
+15-Apr-2021 23:46:16.936 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/docs]
+15-Apr-2021 23:46:17.255 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/docs] has finished in [318] ms
+15-Apr-2021 23:46:17.256 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/manager]
+15-Apr-2021 23:46:17.307 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/manager] has finished in [50] ms
+15-Apr-2021 23:46:17.307 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/examples]
+15-Apr-2021 23:46:17.608 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/examples] has finished in [301] ms
+15-Apr-2021 23:46:17.609 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/ROOT]
+15-Apr-2021 23:46:17.633 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/ROOT] has finished in [25] ms
+15-Apr-2021 23:46:17.633 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/host-manager]
+15-Apr-2021 23:46:17.651 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/host-manager] has finished in [18] ms
+15-Apr-2021 23:46:17.657 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+15-Apr-2021 23:46:17.680 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [802] milliseconds
