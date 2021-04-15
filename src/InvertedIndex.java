@@ -1,10 +1,3 @@
-/* --
-COMP4321 Lab1 Exercise
-Student Name:
-Student ID:
-Section:
-Email:
-*/
 
 import org.rocksdb.RocksDB;
 
@@ -53,6 +46,18 @@ public class InvertedIndex
 	        this.docNextID++;
         }
         db.put(url.getBytes(), content);
+    }
+    
+    public String getAllDocID() throws RocksDBException{
+    	RocksIterator iter = db.newIterator();
+    	String docIDList="";
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		String key = new String(iter.key());
+    		if(key.contains("docMapping_")) {
+    			docIDList = docIDList + new String(iter.value()) + " ";
+    		}
+    	}
+    	return docIDList;
     }
     
     /*
@@ -276,6 +281,67 @@ public class InvertedIndex
 
     }
     
+    /*
+     * Check if the doc ID has the child doc ID
+     */
+    public boolean checkIfChildExist(String p_doc, String c_doc) throws RocksDBException{
+    	String parentID = "PCR_" + p_doc;
+    	byte[] content = db.get(parentID.getBytes());
+    	if(content != null){
+    		String new_content = new String(content);
+    		String[] children = new_content.split(" ");
+    		for (String child: children) {  
+    			if (child.equals(c_doc)) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
+    
+    /*
+     * Get the Doc ID of the page pointing to current page
+     */
+    public String getParent(String child) throws RocksDBException{
+    	String parent_str = "Parent of " + child + ":";
+    	String allDoc = getAllDocID();
+		String[] parents = allDoc.split(" ");
+    	for(String parent:parents) {
+	    	if(checkIfChildExist(parent,child)) {
+	    		parent_str = parent_str + " " + parent+ "(" + getNumOfOutgoingLink(parent) + ")";
+	    	}
+    	}
+    	return parent_str + "\n";
+    }
+    
+    /*
+     * Get the parent pages of all doc in db
+     */
+    public String getParentOfEachPage() throws RocksDBException{
+    	String result = "";
+    	String allDoc = getAllDocID();
+		String[] docs = allDoc.split(" ");
+    	for(String doc:docs) {
+    		result = result + getParent(doc);
+    	}
+    	return result;
+    }
+    
+    /*
+     * Get the number of outgoing link of a page
+     */
+    public int getNumOfOutgoingLink(String docID) throws RocksDBException{
+    	String parentID = "PCR_" + docID;
+    	byte[] content = db.get(parentID.getBytes());
+    	if(content != null){
+    		String new_content = new String(content);
+    		String[] children = new_content.split(" ");
+    		return children.length;
+    	}
+    	return 0;
+    }
+    
  // =========================== Other Functions ================================================
     
     public Vector<String> getURLList()throws RocksDBException {
@@ -325,6 +391,20 @@ public class InvertedIndex
        RocksIterator iter = db.newIterator();
        for(iter.seekToFirst(); iter.isValid(); iter.next()){
            System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+       }
+   }   
+   
+   /*
+    * Print out data in the RocksDB
+    */
+   public void printData(String prefix) throws RocksDBException {
+   	// Print all the data in the hashtable
+       // ADD YOUR CODES HERE
+       RocksIterator iter = db.newIterator();
+       for(iter.seekToFirst(); iter.isValid(); iter.next()){
+    	   if (new String(iter.key()).contains(prefix)) {
+    		   System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+           }
        }
    }   
    

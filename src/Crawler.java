@@ -163,7 +163,7 @@ public class Crawler {
 		 for (Entry<String, Integer> entry : keywordFreqPair) {
 	        	System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
 	        }
-		System.out.printf("\n\nLinks:\n");
+		System.out.println("\n\nLinks:");
 		
 		int index = 1;
 		for(String link: links) {
@@ -399,7 +399,20 @@ public class Crawler {
 		{
 			 System.err.println(e.toString());
 		}
-}
+	}
+	
+	public void pagerank(InvertedIndex index) {
+		try {
+			System.out.println("Start PageRank Now...");
+			String all_parent_list = index.getParentOfEachPage();
+			System.out.println(all_parent_list);
+		}
+		catch(RocksDBException e) 
+		{
+			System.err.println(e.toString());
+		}
+	}
+	
 	
 	public static void main (String[] args) {
 		InvertedIndex index = RocksDBConnection();
@@ -408,6 +421,8 @@ public class Crawler {
 		crawler.crawlLoop(index);
 		try {
 			index.printAll();
+//			index.printData("docMapping");
+//			index.printData("PCR");
 		} catch (RocksDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -415,6 +430,8 @@ public class Crawler {
 		String final_output = crawler.getInfo(crawler,index);
 		crawler.outputTXT(final_output);
 		System.out.println("\nSuccessfully Returned");
+//		crawler.pagerank(index);
+		
 	}
 		
 }
