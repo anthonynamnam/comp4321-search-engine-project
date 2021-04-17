@@ -15,6 +15,8 @@ public class InvertedIndex
     private Options options;
     private int wordNextID;
     private int docNextID;
+    private int prPrecision;
+    private double thersold;
     
     // 
     InvertedIndex(String dbPath) throws RocksDBException
@@ -25,6 +27,8 @@ public class InvertedIndex
         this.options.setCreateIfMissing(true);
         this.wordNextID = 0;
         this.docNextID = 0;
+        this.prPrecision = 7;
+        this.thersold = 1/power(prPrecision);
 
         // creat and open the database
         this.db = RocksDB.open(options, dbPath);
@@ -300,19 +304,25 @@ public class InvertedIndex
     }
     
     
+    
+    
     /*
      * Get the Doc ID of the page pointing to current page
      */
-    public String getParent(String child) throws RocksDBException{
-    	String parent_str = "Parent of " + child + ":";
+    public String getParentOfOnePage(String child) throws RocksDBException{
+    	String parent_str = "";
     	String allDoc = getAllDocID();
 		String[] parents = allDoc.split(" ");
     	for(String parent:parents) {
 	    	if(checkIfChildExist(parent,child)) {
-	    		parent_str = parent_str + " " + parent+ "(" + getNumOfOutgoingLink(parent) + ")";
+	    		if(parent_str.equals("")) {
+	    			parent_str = parent_str + parent;
+	    		}else {
+	    			parent_str = parent_str + " " + parent;
+	    		}
 	    	}
     	}
-    	return parent_str + "\n";
+    	return parent_str;
     }
     
     /*
@@ -323,9 +333,35 @@ public class InvertedIndex
     	String allDoc = getAllDocID();
 		String[] docs = allDoc.split(" ");
     	for(String doc:docs) {
-    		result = result + getParent(doc);
+    		result = result + getParentOfOnePage(doc) + "\n";
     	}
     	return result;
+    }
+    
+    /*
+     * Print the Doc ID of the page pointing to current page
+     */
+    public void printParentOfOnePage(String child) throws RocksDBException{
+    	String parent_str = "Parent of " + child + ":";
+    	String allDoc = getAllDocID();
+		String[] parents = allDoc.split(" ");
+    	for(String parent:parents) {
+	    	if(checkIfChildExist(parent,child)) {
+	    		parent_str = parent_str + " " + parent+ "(Outgoing Link:" + getNumOfOutgoingLink(parent) + " | PR:" + Math.round(getPageRankFromDB(parent)*1000)/1000 + ")";
+	    	}
+    	}
+    	System.out.println(parent_str);
+    }
+    
+    /*
+     * Print the parent pages of all doc in db
+     */
+    public void printParentOfEachPage() throws RocksDBException{
+    	String allDoc = getAllDocID();
+		String[] docs = allDoc.split(" ");
+    	for(String doc:docs) {
+    		printParentOfOnePage(doc);
+    	}
     }
     
     /*
@@ -342,6 +378,233 @@ public class InvertedIndex
     	return 0;
     }
     
+    /*
+     * Get PageRank Array
+     */
+    public double[] getPageRankArray()throws RocksDBException{
+    	String docIDList = getAllDocID();
+		String[] docs = docIDList.split(" ");
+    	double[] pr_val = new double[docs.length];
+		for(String doc:docs) {
+			int id = Integer.valueOf(doc.substring(3,doc.length()));
+			pr_val[id] = getPageRankFromDB(doc);
+		}
+		return pr_val;
+    }
+    
+    /*
+     * Print PageRank Array
+     */
+    public void printPageRankArray()throws RocksDBException{
+    	double[] pr_val = getPageRankArray();
+		for(int i = 0 ; i < pr_val.length; i++) {
+			System.out.println("PR of Doc " + i + ": " + pr_val[i]);
+		}
+    }
+    
+    /*
+     * Print First N doc in PageRank Array
+     */
+    public void printFirstNPageRankArray(int n)throws RocksDBException{
+    	printNtoMPageRankArray(0,n-1);
+    }
+    
+    /*
+     * Print the n-th to m-th doc in PageRank Array
+     */
+    public void printNtoMPageRankArray(int m, int n)throws RocksDBException{
+    	double[] pr_val = getPageRankArray();
+		for(int i = m ; i >= m && i < pr_val.length && i <= n; i++) {
+			System.out.println("PR of Doc " + i + ": " + pr_val[i]);
+		}
+    }
+    
+    /*
+     * Get the sum of the PageRank Array
+     */
+    public double sumOfPageRankArray(double[] pr_val) throws RocksDBException{
+    	double result = 0;
+    	for(double pr:pr_val) {
+			result += pr;
+		}
+    	return result;
+    }
+        
+    /*
+     * Initilaise PageRank Value
+     */
+    public void initPageRankValue() throws RocksDBException{
+    	String docIDList = getAllDocID();
+		String[] docs = docIDList.split(" ");
+		for(String doc:docs) {
+//			addPageRankIntoDB(doc,1.0/docs.length);
+			addPageRankIntoDB(doc,1.0);
+		}
+		System.out.println("PageRank Database Initialised");
+    }
+    
+    /*
+     * Add PageRank into DB
+     */
+    public void addPageRankIntoDB(String docID, double pr) throws RocksDBException{
+    	double precision = roundOff(pr,prPrecision);
+    	String index = "PR_" + docID;
+    	byte[] content = (String.valueOf(precision)).getBytes();
+        db.put(index.getBytes(), content);
+    }
+    
+    /*
+     * Check Convergence of PageRank Value
+     */
+    public boolean checkConvergence(double[] old_pr, double[] new_pr) throws RocksDBException {
+    	double error = 0.0;
+//    	System.out.println("Checking Convergecne!!!!!");
+    	for(int i = 0; i < old_pr.length; i++) {
+    		double thisError = Math.abs(old_pr[i]-new_pr[i]);
+//    		System.out.println(old_pr[i] + " => " + new_pr[i] + " \t| Error: " + Math.abs(old_pr[i]-new_pr[i]));
+    		if(thisError < thersold) {
+    			continue;
+    		}
+    		error = error + thisError;
+    	}
+    	if(error<thersold){    	
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /*
+     * Update PageRank from PR Array
+     */
+    public void updatePageRankIntoDB(double dump_fac,int iter, boolean normalise) throws RocksDBException{
+    	double[] old_pr_val = getPageRankArray();
+    	for(int iter_count = 0 ; iter_count < iter ; iter_count++) {
+	    	double[] new_pr_val = calculatePageRankArray(dump_fac);
+	    	double new_pr_sum = sumOfPageRankArray(new_pr_val);
+	    	if (checkConvergence(old_pr_val,new_pr_val)) {
+	    		System.out.println("!!! --- Convergence Deteced! Update Terminated at Iteration " + iter_count + " --- !!!");
+	    		break;
+	    	}
+	    	System.out.println(">>> Start Updating PageRank for Iteration" + (iter_count+1) + " <<<");
+	    	for(int i = 0; i < new_pr_val.length;i++) {
+	    		String index = "doc" + i;
+	    		if(normalise) {
+	    			addPageRankIntoDB(index,new_pr_val[i]/new_pr_sum);
+	    		}else {
+	    			addPageRankIntoDB(index,new_pr_val[i]);
+	    		}
+	    	}
+//	    	printPageRankArray();
+	    	printFirstNPageRankArray(50);
+//	    	printNtoMPageRankArray(20,30);
+	    	System.out.println(">>> Finished Updating PageRank for Iteration" + (iter_count+1) + " <<<\n");
+	    	old_pr_val = new_pr_val;
+    	}
+    }
+    
+    /*
+     * Get PageRank Value from DB
+     */
+    public double getPageRankFromDB(String docID) throws RocksDBException{
+    	String index = "PR_" + docID;
+    	byte[] content = db.get(index.getBytes());
+    	if(content != null){
+    		String pr_str = new String(content);
+    		double pr = Double.valueOf(pr_str).doubleValue();
+    		return pr;
+    	}
+    	return 0;
+    }
+    
+    /*
+     * Get the value of PR(T1)/C(T1)
+     */
+    public double getPRDivideOutgoingLink(String parentID) throws RocksDBException{
+    	if(Math.abs(getNumOfOutgoingLink(parentID)-0)<thersold) {
+    		return 0.0;
+    	}
+    	return getPageRankFromDB(parentID)/getNumOfOutgoingLink(parentID);
+    }
+    
+    /*
+     * Get the PR value of a page
+     */
+    public double getPageRankValue(double dump_fac, String docID) throws RocksDBException{
+    	String parentDocIDList = getParentOfOnePage(docID);
+    	String[] parentDocs = parentDocIDList.split(" ");
+		double content = 0;
+		for(String parent:parentDocs) {
+			content = content + getPRDivideOutgoingLink(parent);
+		}
+    	return ((1-dump_fac)+dump_fac*content);
+    }
+    
+    /*
+     * Calculate the PageRank of all document (Without Steps)
+     */
+    public void calculatePageRankInDetails(double dump_fac) throws RocksDBException{
+    	String docIDList = getAllDocID();
+		int doc_len = docIDList.split(" ").length;
+		double[] new_pr = new double[doc_len];
+		for(int i = 0;i < doc_len;i++) {
+	    	String target = "doc"+String.valueOf(i);
+			System.out.println("******************************************************");
+	    	System.out.println("Parent of " + target + ": " + getParentOfOnePage(target));
+	    	String parentDocIDList = getParentOfOnePage(target);
+			String[] parentDocs = parentDocIDList.split(" ");
+			int count = 1;
+			double content= 0;
+			System.out.println("Dumping Factor: " + dump_fac);
+			for(String parent:parentDocs) {
+				System.out.println("-------------------------------------------");
+				System.out.println("Parent " + count + ": " + parent);
+				System.out.println("PR of " + parent + " = " + getPageRankFromDB(parent));
+				System.out.println("No. of outgoing link off " + parent + " = " + getNumOfOutgoingLink(parent));
+//				System.out.println("item " + count + ": " + getPRDivideOutgoingLink(parent));
+				content = content + getPRDivideOutgoingLink(parent);
+				count++;
+			}
+			System.out.println("-------------------------------------------");
+			System.out.println("Overall PR of " + target + " = " + getPageRankValue(dump_fac,target));
+			new_pr[i]=roundOff(getPageRankValue(dump_fac,target),prPrecision);
+		}
+		
+    }
+
+    /*
+     * Power function for PageRank
+     */
+    public double power(int numPower) {
+    	double power = 1.0;
+    	for(int i = 0; i < numPower; i ++) {
+    		power *= 10;
+    	}
+    	return power;
+    }
+    
+    /*
+     * Round off function for PageRank
+     */
+    public double roundOff(double input,int numOfdp) {
+    	double power = power(numOfdp);
+    	return Math.round(input*power)/power;
+    }
+    
+    /*
+     * Calculate the PageRank of all document (Without step)
+     */
+    public double[] calculatePageRankArray(double dump_fac) throws RocksDBException{
+    	String docIDList = getAllDocID();
+		int doc_len = docIDList.split(" ").length;
+		double[] new_pr = new double[doc_len];
+		for(int i = 0;i < doc_len;i++) {
+	    	String target = "doc"+String.valueOf(i);
+			new_pr[i]=getPageRankValue(dump_fac,target);
+		}
+		return new_pr;
+		
+    }
+        
  // =========================== Other Functions ================================================
     
     public Vector<String> getURLList()throws RocksDBException {

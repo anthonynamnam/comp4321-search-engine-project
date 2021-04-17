@@ -329,7 +329,8 @@ public class Crawler {
         return entrySet;
 	}
 	
-	/** rocksdb connection helper
+	/*
+	 *  rocksdb connection helper
 	 */
 	public static InvertedIndex RocksDBConnection() {
 		 InvertedIndex index = null;
@@ -401,28 +402,21 @@ public class Crawler {
 		}
 	}
 	
-	public void pagerank(InvertedIndex index) {
-		try {
-			System.out.println("Start PageRank Now...");
-			String all_parent_list = index.getParentOfEachPage();
-			System.out.println(all_parent_list);
-		}
-		catch(RocksDBException e) 
-		{
-			System.err.println(e.toString());
-		}
-	}
-	
-	
+		
 	public static void main (String[] args) {
 		InvertedIndex index = RocksDBConnection();
 		String url = "https://www.cse.ust.hk/";
 		Crawler crawler = new Crawler(url);
 		crawler.crawlLoop(index);
 		try {
+			
 			index.printAll();
 //			index.printData("docMapping");
 //			index.printData("PCR");
+//			index.initPageRankValue();
+//			index.printFirstNPageRankArray(30);
+//			index.updatePageRankIntoDB(0.8,20,true);
+//			index.printPageRankArray();
 		} catch (RocksDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -430,7 +424,6 @@ public class Crawler {
 		String final_output = crawler.getInfo(crawler,index);
 		crawler.outputTXT(final_output);
 		System.out.println("\nSuccessfully Returned");
-//		crawler.pagerank(index);
 		
 	}
 		
