@@ -168,10 +168,24 @@ public class Crawler {
 		int index = 1;
 		for(String link: links) {
 			System.out.println(String.format("Child Link %d: %s", index++, link));
+			// Check if Link has cralwed or not
 			if(this.urls.contains(link)) {
+				System.out.println("Link Existed!!!!");
 				continue;
 			}
-			this.URLqueue.add(new Link(link, focus.level + 1)); // add links
+			// Check if the child link is the relative path
+			else if(focus.url.contains("cse.ust.hk") && link.charAt(0)=='/') {
+				this.URLqueue.add(new Link(focus.url+link.substring(1), focus.level + 1)); // add links
+				System.out.println("Added Link: " + focus.url+link.substring(1));
+			}
+			// Check if the child link is belongs to cse domain
+			else if(link.contains("cse.ust.hk")) {
+				this.URLqueue.add(new Link(link, focus.level + 1)); // add links
+				System.out.println("Added Link: " + link);
+			}
+			else {
+				continue;
+			}
 		}
 		System.out.println("-------------------------------------------------------------------------------------------");
 	}
@@ -191,7 +205,7 @@ public class Crawler {
 			Link focus = this.URLqueue.remove(0);
 			/* start to crawl on the page */
 			try {
-				if (count++ == 30) break; // stop criteria
+				if (count++ == 100) break; // stop criteria
 				Response res = this.getResponse(focus, index);
 				Document doc = res.parse();
 				
@@ -354,6 +368,7 @@ public class Crawler {
 	public String getInfo(Crawler crawler,InvertedIndex index) {
 
 		String result = "";
+		int count = 1;
 		try {
 			HashSet<String> urls = crawler.urls;
 			for(String url: urls) {
@@ -361,7 +376,7 @@ public class Crawler {
 				
 				// get the page title
 				if(metadata.size()!=0)
-					result = result + "Page Title: " + metadata.get(0) + "\n";
+					result = result + String.valueOf(count++) + "Page Title: " + metadata.get(0) + "\n";
 		
 				// get the url
 				result = result + "URL: " + url + "\n";
@@ -410,8 +425,8 @@ public class Crawler {
 		crawler.crawlLoop(index);
 		try {
 			
-			index.printAll();
-//			index.printData("docMapping");
+//			index.printAll();
+			index.printData("docMapping");
 //			index.printData("PCR");
 //			index.initPageRankValue();
 //			index.printFirstNPageRankArray(30);
