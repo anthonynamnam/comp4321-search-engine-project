@@ -1,3 +1,4 @@
+package InvIndex;
 
 import org.rocksdb.RocksDB;
 
@@ -19,7 +20,7 @@ public class InvertedIndex
     private double thersold;
     
     // 
-    InvertedIndex(String dbPath) throws RocksDBException
+    public InvertedIndex(String dbPath) throws RocksDBException
     {
         // the Options class contains a set of configurable DB options
         // that determines the behaviour of the database.
@@ -30,7 +31,7 @@ public class InvertedIndex
         this.prPrecision = 7;
         this.thersold = 1/power(prPrecision);
 
-        // creat and open the database
+        // create and open the database
         this.db = RocksDB.open(options, dbPath);
     }
     
@@ -669,7 +670,15 @@ public class InvertedIndex
     		   System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
            }
        }
-   }   
+   }
+   
+// =========================== Function for Web Query =============================
+   
+   public String query(String input) throws RocksDBException{
+	   String res = "";
+	   res = input.split(" ")[0];
+	   return res;
+   }
    
 // =========================== Main Program ================================================   
   
@@ -692,3 +701,4 @@ public class InvertedIndex
         }
     }
 }
+;

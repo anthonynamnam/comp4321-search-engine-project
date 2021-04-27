@@ -1,4 +1,6 @@
 
+import InvIndex.*;
+
 import java.util.*;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection;
@@ -355,7 +357,7 @@ public class Crawler {
              // modify the path to your database
              String path = "db";
 
-             index = new InvertedIndex(path);
+             index = new InvIndex.InvertedIndex(path);
              index.clear();
          }
          catch(RocksDBException e)
