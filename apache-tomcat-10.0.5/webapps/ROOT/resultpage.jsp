@@ -54,12 +54,12 @@
     if(request.getParameter("txtname") !=null) {
         query=request.getParameter("txtname");
     } %>
-    <%-- InvIndex index = new InvIndex.InvertedIndex("/db"); --%>
-    <%-- String result = index.query(query); --%>
-    <%-- session.setAttribute("currQuery",result); --%>
+    <%-- <% InvIndex.InvertedIndex index = new InvIndex.InvertedIndex("/db"); %> --%>
+    <%-- <% String result = index.query(query); %> --%>
+    <%-- <% session.setAttribute("currQuery",result); %> --%>
     
-    <%-- SearchDB.Search s = new SearchDB.Search();  --%>
-    <%-- String result=s.startSearch(queryArray); --%>
+    <%-- <% SearchDB.Search s = new SearchDB.Search(); %>  --%>
+    <%-- <% String result=s.startSearch(queryArray); %> --%>
     
         <header class=" text-white d-flex"
             style="/*background-image: url('./assets/img/header.jpg');*/height: 100vh;">

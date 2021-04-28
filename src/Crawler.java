@@ -160,7 +160,7 @@ public class Crawler {
 	/*
 	 * Print page's words and links
 	 */
-	public void printWordsAndLinks(Link focus, Set<Entry<String, Integer>> keywordFreqPair, Vector<String> links) {	
+	public void printWordsAndLinks(Link focus, Set<Entry<String, Integer>> keywordFreqPair, Vector<String> links, Document doc) {	
 		System.out.println("\nWords:");
 		 for (Entry<String, Integer> entry : keywordFreqPair) {
 	        	System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
@@ -211,8 +211,9 @@ public class Crawler {
 				Response res = this.getResponse(focus, index);
 				Document doc = res.parse();
 				
-				if(res.parse().title().isEmpty() || res.statusCode() == 301 || res.statusCode() == 302) {
-					continue;
+				if(doc.title().isEmpty() 	|| res.statusCode() == 301 || res.statusCode() == 302 ||
+				   res.statusCode() == 404 	|| res.statusCode() == 403 || res.statusCode() == 401) {
+					continue;				
 				}
 				
 				Vector<String> words = this.extractWords(doc);
@@ -236,7 +237,7 @@ public class Crawler {
 					
 		        //Print spider_result fashion output to console
 				printPageInfo(res, doc, focus);
-				printWordsAndLinks(focus, keywordFreqPair, links);
+				printWordsAndLinks(focus, keywordFreqPair, links, doc);
 				
 				// Creating URL and docID Mapping
 				docMapping(links, index);
@@ -308,7 +309,12 @@ public class Crawler {
 	public void parentChild(String p_url,Vector<String> children, InvertedIndex index) {
 		for(String child_url: children) {
 			try {
-				index.addPCRelation(p_url,child_url);
+				if(p_url.contains("cse.ust.hk") && child_url.contains("cse.ust.hk")) {
+					index.addPCRelation(p_url,child_url);
+				}
+				else {
+					continue;
+				}
 			} catch (RocksDBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -430,10 +436,10 @@ public class Crawler {
 //			index.printAll();
 			index.printData("docMapping");
 //			index.printData("PCR");
-//			index.initPageRankValue();
+			index.initPageRankValue();
 //			index.printFirstNPageRankArray(30);
-//			index.updatePageRankIntoDB(0.8,20,true);
-//			index.printPageRankArray();
+			index.updatePageRankIntoDB(0.8,10,true);
+			index.printPageRankArray();
 		} catch (RocksDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

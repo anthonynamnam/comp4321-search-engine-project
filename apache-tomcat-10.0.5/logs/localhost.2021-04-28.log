@@ -1,0 +1,83 @@
+28-Apr-2021 19:33:53.137 SEVERE [http-nio-8080-exec-20] org.apache.catalina.core.StandardWrapperValve.invoke Servlet.service() for servlet [jsp] in context with path [] threw exception [Unable to compile class for JSP: 
+
+An error occurred at line: [57] in the jsp file: [/resultpage.jsp]
+InvIndex.InvertedIndex cannot be resolved to a type
+54:     if(request.getParameter("txtname") !=null) {
+55:         query=request.getParameter("txtname");
+56:     } %>
+57:     <% InvIndex.InvertedIndex index = new InvIndex.InvertedIndex("/db"); %>
+58:     <%-- String result = index.query(query); --%>
+59:     <%-- session.setAttribute("currQuery",result); --%>
+60:     
+
+
+An error occurred at line: [57] in the jsp file: [/resultpage.jsp]
+InvIndex.InvertedIndex cannot be resolved to a type
+54:     if(request.getParameter("txtname") !=null) {
+55:         query=request.getParameter("txtname");
+56:     } %>
+57:     <% InvIndex.InvertedIndex index = new InvIndex.InvertedIndex("/db"); %>
+58:     <%-- String result = index.query(query); --%>
+59:     <%-- session.setAttribute("currQuery",result); --%>
+60:     
+
+
+Stacktrace:] with root cause
+	org.apache.jasper.JasperException: Unable to compile class for JSP: 
+
+An error occurred at line: [57] in the jsp file: [/resultpage.jsp]
+InvIndex.InvertedIndex cannot be resolved to a type
+54:     if(request.getParameter("txtname") !=null) {
+55:         query=request.getParameter("txtname");
+56:     } %>
+57:     <% InvIndex.InvertedIndex index = new InvIndex.InvertedIndex("/db"); %>
+58:     <%-- String result = index.query(query); --%>
+59:     <%-- session.setAttribute("currQuery",result); --%>
+60:     
+
+
+An error occurred at line: [57] in the jsp file: [/resultpage.jsp]
+InvIndex.InvertedIndex cannot be resolved to a type
+54:     if(request.getParameter("txtname") !=null) {
+55:         query=request.getParameter("txtname");
+56:     } %>
+57:     <% InvIndex.InvertedIndex index = new InvIndex.InvertedIndex("/db"); %>
+58:     <%-- String result = index.query(query); --%>
+59:     <%-- session.setAttribute("currQuery",result); --%>
+60:     
+
+
+Stacktrace:
+		at org.apache.jasper.compiler.DefaultErrorHandler.javacError(DefaultErrorHandler.java:103)
+		at org.apache.jasper.compiler.ErrorDispatcher.javacError(ErrorDispatcher.java:213)
+		at org.apache.jasper.compiler.JDTCompiler.generateClass(JDTCompiler.java:481)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:398)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:368)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:352)
+		at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:603)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:400)
+		at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:379)
+		at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:327)
+		at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:770)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:223)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:543)
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:690)
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:353)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:374)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:870)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1696)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+		at java.base/java.lang.Thread.run(Thread.java:834)
