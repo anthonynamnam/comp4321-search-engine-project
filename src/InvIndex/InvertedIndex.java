@@ -12,55 +12,80 @@ import org.rocksdb.RocksIterator;
 
 public class InvertedIndex
 {
-    private RocksDB db;
+    private RocksDB docmapdb;
+    private RocksDB wordmapdb;
+    private RocksDB inverteddb;
+    private RocksDB forwarddb;
+    private RocksDB metadatadb;
+    private RocksDB parentchilddb;
+    private RocksDB pagerankdb;
+    
     private Options options;
+    
+    private String db1 = "db/doc";
+    private String db2 = "db/word";
+    private String db3 = "db/invert";
+    private String db4 = "db/forward";
+    private String db5 = "db/metadata";
+    private String db6 = "db/parentchild";
+    private String db7 = "db/pagerank";
+    
     private int wordNextID;
     private int docNextID;
     private int prPrecision;
     private double thersold;
     
     // 
-    public InvertedIndex(String dbPath) throws RocksDBException
+    public InvertedIndex() throws RocksDBException
     {
         // the Options class contains a set of configurable DB options
         // that determines the behaviour of the database.
         this.options = new Options();
         this.options.setCreateIfMissing(true);
+        
         this.wordNextID = 0;
         this.docNextID = 0;
         this.prPrecision = 7;
         this.thersold = 1/power(prPrecision);
-
-        // create and open the database
-        this.db = RocksDB.open(options, dbPath);
+              
+        // create and open these databases
+        this.docmapdb = RocksDB.open(options, db1);
+        this.wordmapdb = RocksDB.open(options, db2);
+        this.inverteddb = RocksDB.open(options, db3);
+        this.forwarddb = RocksDB.open(options, db4);
+        this.metadatadb = RocksDB.open(options, db5);
+        this.parentchilddb = RocksDB.open(options, db6);
+        this.pagerankdb = RocksDB.open(options, db7);
     }
+    
+ 
     
  // ===============================  Document Mapping Part  ===================================
     
     /*
-     *  Add Document Mapping
+     *  Add new Document Mapping pair (e.g. "https://www.cse.ust.hk/" : "doc0")
      */
     public void addDocMappingEntry(String url) throws RocksDBException{
-    	byte[] content = db.get(url.getBytes());
-    	
+    	byte[] content = docmapdb.get(url.getBytes());
     	if(content != null){
+    		// Stop adding if mapping exists
             return;
         } else {
-	        //create new key value pair
+	        // Add new doc mapping
 	        content = ("doc" + this.docNextID).getBytes();
 	        this.docNextID++;
         }
-        db.put(url.getBytes(), content);
+    	docmapdb.put(url.getBytes(), content);
     }
     
+    /*
+     *  Get all existing Document ID (e.g. "doc1 doc5 doc2")
+     */
     public String getAllDocID() throws RocksDBException{
-    	RocksIterator iter = db.newIterator();
     	String docIDList="";
+    	RocksIterator iter = docmapdb.newIterator();
     	for (iter.seekToFirst(); iter.isValid(); iter.next()){
-    		String key = new String(iter.key());
-    		if(key.contains("docMapping_")) {
-    			docIDList = docIDList + new String(iter.value()) + " ";
-    		}
+    		docIDList = docIDList + new String(iter.value()) + " ";
     	}
     	return docIDList;
     }
@@ -70,10 +95,15 @@ public class InvertedIndex
      */
     public String getDocIDbyURL(String url) throws RocksDBException {
     	String result = "";
-    	String new_url = "docMapping_" + url;
-    	byte[] content = db.get(new_url.getBytes());
+    	byte[] content = docmapdb.get(url.getBytes());
     	if(content != null) {
+    		// if docID exist
     		result = new String(content);
+    	}
+    	else {
+    		// if docID not exist, make one
+    		addDocMappingEntry(url);
+    		result = getDocIDbyURL(url);
     	}
     	return result;
     }
@@ -82,72 +112,157 @@ public class InvertedIndex
      *  Get the URL by the Doc ID (e.g. "doc0" returns "https://www.cse.ust.hk/")
      */
     public String getURLbyDocID(String docID) throws RocksDBException{
-    	RocksIterator iter = db.newIterator();
-    	String url = "";
+    	RocksIterator iter = docmapdb.newIterator();
     	for (iter.seekToFirst(); iter.isValid(); iter.next()){
     		String value = new String(iter.value());
     		if(value.equals(docID)) {
-    			url = new String(iter.key());
-    			url = url.replace("docMapping_","");
-    			break;
+    			return new String(iter.key());
     		}
     	}
-    	return url;
+    	return "";
+    }
+    
+    /*
+     * Delete Document Mapping by URL in RocksDB
+     */
+    public void delDocMapbyURL(String url) throws RocksDBException
+    {
+    	docmapdb.remove(url.getBytes());
+    }  
+    
+    /*
+     * Delete Document Mapping by URL
+     */
+    public void delDocMapbyDocID(String docID) throws RocksDBException
+    {
+    	String url = getURLbyDocID(docID);
+    	delDocMapbyURL(url);
+    } 
+    
+    /*
+     * Delete All Document Mapping
+     */
+    public void delAllDocMap() throws RocksDBException
+    {
+    	System.out.println(">>> Deleting All Word Mapping...");
+    	RocksIterator iter = docmapdb.newIterator();
+        for(iter.seekToFirst(); iter.isValid(); iter.next()){
+        	docmapdb.remove(new String(iter.key()).getBytes());
+        }
+    } 
+    
+    /*
+     *  Print out All Document Mapping pairs
+     */
+    public void printAllDocMapping() throws RocksDBException{
+    	System.out.println(">>> Printing All Doc Mapping...");
+    	RocksIterator iter = docmapdb.newIterator();
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+    	}
     }
     
 // ===============================  Word Mapping Part  ===================================
     
     /*
-     * Add Word Mapping
+     * Add new word mapping pair (e.g. "abd": "word1")
      */
     public void addWordMappingEntry(String word) throws RocksDBException{
-    	byte[] content = db.get(word.getBytes());
-  
+    	byte[] content = wordmapdb.get(word.getBytes());
     	if(content != null){
+    		// Stop adding if mapping exists
             return;
         } else {
-            //create new key value pair
+        	// Add new word mapping
             content = ("word" + this.wordNextID).getBytes();
             this.wordNextID++;
         }   
-        db.put(word.getBytes(), content);
+    	wordmapdb.put(word.getBytes(), content);
     }
     
     /*
-     *  Get the wordID by the word (e.g. "abd" => "word1")
+     *  Get all existing Word ID (e.g. "word1 word5 word2")
      */
-    public String getWordID(String word) throws RocksDBException {
-    	String new_word = "wordMapping_" + word;
-    	byte[] content = db.get(new_word.getBytes());
+    public String getAllWordID() throws RocksDBException{
+    	RocksIterator iter = wordmapdb.newIterator();
+    	String docIDList="";
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		docIDList = docIDList + new String(iter.value()) + " ";
+    	}
+    	return docIDList;
+    }
+    
+    /*
+     *  Get the WordID by the Word (e.g. "abd" => "word1")
+     */
+    public String getWordIDbyWord(String word) throws RocksDBException {
+    	byte[] content = wordmapdb.get(word.getBytes());
     	return new String(content);
     }
     
     /*
-     * Delete data in RocksDB
+     *  Get the Word by the Word ID (e.g. "word1" returns "abd")
      */
-    public void delEntry(String word) throws RocksDBException
+    public String getWordbyWordID(String wordID) throws RocksDBException{
+    	RocksIterator iter = wordmapdb.newIterator();
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		if(new String(iter.value()).equals(wordID)) {
+    			return new String(iter.key());
+    		}
+    	}
+    	return "";
+    }
+    
+    /*
+     * Delete Word Mapping by Word in the Word Mapping
+     */
+    public void delWordMapbyWord(String word) throws RocksDBException
     {
-        // Delete the word and its list from the hashtable
-        // ADD YOUR CODES HERE
-        db.remove(word.getBytes());
+    	wordmapdb.remove(word.getBytes());
     }  
+    
+    /*
+     * Delete Word Mapping by WordID in the Word Mapping
+     */
+    public void delWordMapbyWordID(String wordID) throws RocksDBException
+    {
+    	String word = getWordbyWordID(wordID);
+    	wordmapdb.remove(word.getBytes());
+    }  
+    
+    /*
+     * Delete All Word Mapping
+     */
+    public void delAllWordMap() throws RocksDBException
+    {
+    	System.out.println(">>> Deleting All Word Mapping...");
+    	RocksIterator iter = wordmapdb.newIterator();
+        for(iter.seekToFirst(); iter.isValid(); iter.next()){
+        	wordmapdb.remove(new String(iter.key()).getBytes());
+        }
+    } 
+    
+    /*
+     *  Print out All Word Mapping pairs
+     */
+    public void printAllWordMapping() throws RocksDBException{
+    	System.out.println(">>> Printing All Word Mapping...");
+    	RocksIterator iter = wordmapdb.newIterator();
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+    	}
+    }
     
  // ===============================  Metadata Part  ===================================
     
     /*
-     * Add Metadata of the URL into RocksDB
+     * Add Metadata of the URL into RocksDB ("doc1" : "title:lastmodification:size:lang")
      */
-    public void metadata(String url, String title, String lm, int size, String lang, int level) throws RocksDBException{
- 	   String str = "metadata_" + getDocIDbyURL(url);
- 	   byte[] content = db.get(str.getBytes());
- 	   if(content != null) {
-    		//append
-    		content = (new String(content) + " " + title + ":" + lm + ":" + size + ":" + lang).getBytes();
-    	} else {
-    		//create new inverted_wordID -> docID freq
-    		content = (title + ":" + lm + ":" + size + ":" + lang).getBytes();
-    	}
-    	db.put(str.getBytes(), content);
+    public void addMetadata(String url, String title, String lm, int size, String lang, int level) throws RocksDBException{
+ 	   String docID = getDocIDbyURL(url);
+ 	   // Overwrite the old data if crawl again
+ 	   byte[] content = (title + ":" + lm + ":" + size + ":" + lang).getBytes();
+ 	   metadatadb.put(docID.getBytes(), content);
     }
     
     /*
@@ -155,90 +270,264 @@ public class InvertedIndex
      */
     public Vector<String> getMetadata(String url) throws RocksDBException{
  	   Vector<String> result = new Vector<String>();
- 	   String str = "metadata_" + getDocIDbyURL(url);
- 	   byte[] content = db.get(str.getBytes());
+ 	   String docID = getDocIDbyURL(url);
+ 	   byte[] content = metadatadb.get(docID.getBytes());
  	   if(content != null) {
  		   String data = new String(content);
- 		   String[] metadata =data.split(":");
- 		   for (String d:metadata) {
+ 		   for (String d:data.split(":")) {
  			   result.add(d);
  		   }
  	   }
- 	   
  	   return result;
     }
     
     /*
-     *  Get last modified date of the URL
+     *  Get Title of the URL
      */
-    public String getLastModified(String url) throws RocksDBException{
-    	String str = "metadata_" + getDocIDbyURL(url);
-    	byte[] content = db.get(str.getBytes());
-    	String contentStr = content.toString();
-    	System.out.println("contentStr" + contentStr);
-    	String[] parts = contentStr.split(":");
-    	return parts[0];
+    public String getTitlebyURL(String url) throws RocksDBException{
+    	Vector<String> meta = getMetadata(url);
+    	if(meta.size()!=0) {
+    		return meta.get(0);
+    	}
+    	return "";
+    }
+    
+    /*
+     *  Get Last Modification Date of the URL
+     */
+    public String getLastModifiedbyURL(String url) throws RocksDBException{
+    	Vector<String> meta = getMetadata(url);
+    	if(meta.size()!=0) {
+    		return meta.get(1);
+    	}
+    	return "";
+    }
+    
+    /*
+     *  Get Size of the URL
+     */
+    public String getSizebyURL(String url) throws RocksDBException{
+    	Vector<String> meta = getMetadata(url);
+    	if(meta.size()!=0) {
+    		return meta.get(2);
+    	}
+    	return "";
+    }
+    
+    /*
+     *  Get Lang of the URL
+     */
+    public String getLangbyURL(String url) throws RocksDBException{
+    	Vector<String> meta = getMetadata(url);
+    	if(meta.size()!=0) {
+    		return meta.get(3);
+    	}
+    	return "";
+    }
+    
+    /*
+     * Delete All Metadata
+     */
+    public void delAllMetadata() throws RocksDBException
+    {
+    	System.out.println(">>> Deleting All Metadata...");
+    	RocksIterator iter = metadatadb.newIterator();
+        for(iter.seekToFirst(); iter.isValid(); iter.next()){
+        	metadatadb.remove(new String(iter.key()).getBytes());
+        }
+    } 
+    
+    /*
+     *  Print out All Metadata
+     */
+    public void printAllMetadata() throws RocksDBException{
+    	System.out.println(">>> Printing All Metadata...");
+    	RocksIterator iter = metadatadb.newIterator();
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+    	}
+    }
+    
+    /*
+     *  Print out All Metadata by Doc ID
+     */
+    public void printAllMetadataByDocID(String docID) throws RocksDBException{
+    	System.out.println(">>> Printing out Metadata by Doc ID...");
+    	byte[] content = metadatadb.get(docID.getBytes());
+    	if(content != null) {
+    		System.out.println(new String(content));
+    	}
     }
     
  // ===============================  Inverted Index Part  =================================== 
     
     /*
-     * Add data into inverted index
+     * Add word into inverted index (e.g. "word1" : "doc0:2 doc2:5"
      */
-    public void invert(String url, String word, int freq) throws RocksDBException {
+    public void addInvertedIndex(String url, String word, int freq) throws RocksDBException {
     	String docID = getDocIDbyURL(url);
-    	String wordID = getWordID(word);
-    	String str = "inverted_" + wordID;
-    	
-    	byte[] content = db.get(str.getBytes());
+    	String wordID = getWordIDbyWord(word);
+    	byte[] content = inverteddb.get(wordID.getBytes());
     	if(content != null) {
-    		//append
-    		content = (new String(content) + " " + docID + ":" + freq).getBytes();
+    		boolean updated = false;
+    		String update_freq = "";
+    		String[] docFreq_list = new String(content).split(" ");
+    		for (String docFreqPair:docFreq_list) {
+    			if(!docFreqPair.contains(":")) {
+    				continue;
+    			}
+    			String[] pair = docFreqPair.split(":");
+    			String d = pair[0];
+    			String f = pair[1];
+    			// Check if the record exists
+    			if(d.equals(docID)) {
+    				// Need Update
+    				update_freq = update_freq + docID + ":" + String.valueOf(freq) + " ";
+    				updated = true;
+    			}else {
+    				// No need update
+    				update_freq = update_freq + d + ":" + f + " ";
+    			}
+    		}
+			// If have not update, append it
+			if(!updated) {
+				update_freq = update_freq + docID + ":" + String.valueOf(freq) + " ";
+			}
+    		content = (update_freq).getBytes();
     	} else {
-    		//create new inverted_wordID -> docID freq
+    		// Add the new inverted indexing for the wordID
     		content = (docID + ":" + freq).getBytes();
     	}
-    	db.put(str.getBytes(), content);
+    	inverteddb.put(wordID.getBytes(), content);
     }
+    
+    /*
+     * Delete All Inverted Index
+     */
+    public void delAllInvertedIndex() throws RocksDBException
+    {
+    	System.out.println(">>> Deleting All Inverted Index...");
+    	RocksIterator iter = inverteddb.newIterator();
+        for(iter.seekToFirst(); iter.isValid(); iter.next()){
+        	inverteddb.remove(new String(iter.key()).getBytes());
+        }
+    } 
+    
+    /*
+     *  Print out All Inverted Index
+     */
+    public void printAllInvertedIndex() throws RocksDBException{
+    	System.out.println(">>> Printing All Inverted Index...");
+    	RocksIterator iter = inverteddb.newIterator();
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+    	}
+    }
+    
+    /*
+     *  Print out All Inverted Index by Word ID
+     */
+    public void printAllInvertedIndex(String wordID) throws RocksDBException{
+    	System.out.println(">>> Printing out Inverted Index by Word ID...");
+    	byte[] content = inverteddb.get(wordID.getBytes());
+    	if(content != null) {
+    		System.out.println(new String(content));
+    	}
+    }
+    
     
  // ===============================  Forward Index Part  ====================================
     
     /*
-     * Add data into forward index
+     * Add data into forward index (e.g. "doc1" : "word4:2 word5:1")
      */
-    public void forward(String url, String word, int count) throws RocksDBException{
-    	String str = getDocIDbyURL(url);
-    	str = "forward_" + str;
-    	byte[] content = db.get(str.getBytes());
+    public void addForwardIndex(String url, String word, int count) throws RocksDBException{
+    	String docID = getDocIDbyURL(url);
+    	byte[] content = forwarddb.get(docID.getBytes());
     	if(content != null){
-            //append
-            content = (new String(content) + " " + word + ":" +String.valueOf(count)).getBytes();
+    		boolean updated = false;
+    		String update_freq = "";
+    		String[] wordFreq_list = new String(content).split(" ");
+    		for (String wordFreqPair:wordFreq_list) {
+    			String[] pair = wordFreqPair.split(":");
+    			String w = pair[0];
+    			String f = pair[1];
+    			// Check if the record exists
+    			if(w.equals(word)) {
+    				// Need Update
+    				update_freq = update_freq + word + ":" + String.valueOf(count) + " ";
+    				updated = true;
+    			}else {
+    				// No need update
+    				update_freq = update_freq + w + ":" + f + " ";
+    			}  			
+    		}
+    		// If have not update, append it
+			if(!updated) {
+				update_freq = update_freq + word + ":" + String.valueOf(count) + " ";
+			}  
+            content = (update_freq).getBytes();
         } else {
-            //create new key value pair
+            // Add new forward indexing for the docID
             content = (word + ":" + String.valueOf(count)).getBytes();
         }   
-        db.put(str.getBytes(), content);
+    	forwarddb.put(docID.getBytes(), content);
     }
     
     /*
      * Get data in forward index by URL
      */
-    public String getForward(String url)throws RocksDBException{
-    	String str = getDocIDbyURL(url);
-    	str = "forward_" + str;
-    	byte[] content = db.get(str.getBytes());
+    public String getForwardIndex(String url)throws RocksDBException{
+    	String docID = getDocIDbyURL(url);
+    	byte[] content = forwarddb.get(docID.getBytes());
     	String result = "";
     	if(content != null){
-            //append
-    		String new_content = new String(content);
-    		String[] keywordPair = new_content.split(" ");
-    		for(String pair: keywordPair) {
+    		String wordFreq = new String(content);
+    		String[] wordFreqPair = wordFreq.split(" ");
+    		for(String pair: wordFreqPair) {
+    			if(!pair.contains(":")) {
+    				continue;
+    			}
     			String keyword = pair.split(":")[0];
     			String freq = pair.split(":")[1];
     			result = result + keyword + " " + freq + "; ";
     		}
         }
         return result + "\n";
+    }
+
+    /*
+     * Delete All Forward Index
+     */
+    public void delAllForwardIndex() throws RocksDBException
+    {
+    	System.out.println(">>> Deleting All Forward Index...");
+    	RocksIterator iter = forwarddb.newIterator();
+        for(iter.seekToFirst(); iter.isValid(); iter.next()){
+        	forwarddb.remove(new String(iter.key()).getBytes());
+        }
+    } 
+   
+    /*
+     *  Print out All Forward Index
+     */
+    public void printAllForwardIndex() throws RocksDBException{
+    	System.out.println(">>> Printing All Forward Index...");
+    	RocksIterator iter = forwarddb.newIterator();
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+    	}
+    }
+    
+    /*
+     *  Print out All Forward Index by Doc ID
+     */
+    public void printAllForwardIndexbyDocID(String docID) throws RocksDBException{
+    	System.out.println(">>> Printing out Forward Index by Doc ID...");
+    	byte[] content = forwarddb.get(docID.getBytes());
+    	if(content != null) {
+    		System.out.println(new String(content));
+    	}
     }
    
  // ========================  Linkage Part (Parent-Child Relation)  =========================
@@ -247,21 +536,19 @@ public class InvertedIndex
      * Add the link between the parent and child relation
      */
     public void addPCRelation(String p_url, String c_url) throws RocksDBException{
-    	String parentID = "PCR_" + getDocIDbyURL(p_url);
+    	String parentID = getDocIDbyURL(p_url);
     	String childID = getDocIDbyURL(c_url);
-    	byte[] content = db.get(parentID.getBytes());
+    	byte[] content = parentchilddb.get(parentID.getBytes());
     	if(content != null){
-            //append
-    		String old_child = new String(content);
-    		if (!old_child.contains(childID)) {
+    		String old_children = new String(content);
+    		if (!old_children.contains(childID)) {
     			content = (new String(content) + " " + childID).getBytes();
     		}
             
         } else {
-            //create new key value pair
             content = (childID).getBytes();
         }   
-        db.put(parentID.getBytes(), content);
+    	parentchilddb.put(parentID.getBytes(), content);
     }
     
     /*
@@ -269,8 +556,8 @@ public class InvertedIndex
      */
     public String getPCRelation(String p_url) throws RocksDBException{
     	String result = new String();
-    	String parentID = "PCR_" + getDocIDbyURL(p_url);
-    	byte[] content = db.get(parentID.getBytes());
+    	String parentID = getDocIDbyURL(p_url);
+    	byte[] content = parentchilddb.get(parentID.getBytes());
     	if(content != null){
     		String new_content = new String(content);
     		String[] children = new_content.split(" ");
@@ -283,28 +570,43 @@ public class InvertedIndex
     	}else {
     		return "";
     	}
+    }
 
+    /*
+     *  Print out All Parent Child Relation
+     */
+    public void printAllParentChild() throws RocksDBException{
+    	System.out.println(">>> Printing All Parent Child Relation...");
+    	RocksIterator iter = parentchilddb.newIterator();
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+    	}
+    }
+    
+    /*
+     *  Print out All Parent Child Relation
+     */
+    public void delAllParentChild() throws RocksDBException{
+    	System.out.println(">>> Deleting All Parent Child Relation...");
+    	RocksIterator iter = parentchilddb.newIterator();
+        for(iter.seekToFirst(); iter.isValid(); iter.next()){
+        	parentchilddb.remove(new String(iter.key()).getBytes());
+        }
     }
     
     /*
      * Check if the doc ID has the child doc ID
      */
     public boolean checkIfChildExist(String p_doc, String c_doc) throws RocksDBException{
-    	String parentID = "PCR_" + p_doc;
-    	byte[] content = db.get(parentID.getBytes());
+    	byte[] content = parentchilddb.get(p_doc.getBytes());
     	if(content != null){
-    		String new_content = new String(content);
-    		String[] children = new_content.split(" ");
-    		for (String child: children) {  
-    			if (child.equals(c_doc)) {
-    				return true;
-    			}
+    		String children = new String(content);
+    		if (children.contains(c_doc)) {
+    			return true;
     		}
     	}
     	return false;
-    }
-    
-    
+    }   
     
     
     /*
@@ -325,20 +627,7 @@ public class InvertedIndex
     	}
     	return parent_str;
     }
-    
-    /*
-     * Get the parent pages of all doc in db
-     */
-    public String getParentOfEachPage() throws RocksDBException{
-    	String result = "";
-    	String allDoc = getAllDocID();
-		String[] docs = allDoc.split(" ");
-    	for(String doc:docs) {
-    		result = result + getParentOfOnePage(doc) + "\n";
-    	}
-    	return result;
-    }
-    
+      
     /*
      * Print the Doc ID of the page pointing to current page
      */
@@ -354,27 +643,15 @@ public class InvertedIndex
     	System.out.println(parent_str);
     }
     
-    /*
-     * Print the parent pages of all doc in db
-     */
-    public void printParentOfEachPage() throws RocksDBException{
-    	String allDoc = getAllDocID();
-		String[] docs = allDoc.split(" ");
-    	for(String doc:docs) {
-    		printParentOfOnePage(doc);
-    	}
-    }
+ // =============================  PageRank  ===========================
     
     /*
      * Get the number of outgoing link of a page
      */
     public int getNumOfOutgoingLink(String docID) throws RocksDBException{
-    	String parentID = "PCR_" + docID;
-    	byte[] content = db.get(parentID.getBytes());
+    	byte[] content = parentchilddb.get(docID.getBytes());
     	if(content != null){
-    		String new_content = new String(content);
-    		String[] children = new_content.split(" ");
-    		return children.length;
+    		return new String(content).split(" ").length;
     	}
     	return 0;
     }
@@ -391,6 +668,28 @@ public class InvertedIndex
 			pr_val[id] = getPageRankFromDB(doc);
 		}
 		return pr_val;
+    }
+    
+    /*
+     * Print All PageRank in db
+     */
+    public void printAllPageRank() throws RocksDBException{
+    	System.out.println(">>> Printing All PageRank...");
+    	RocksIterator iter = pagerankdb.newIterator();
+    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
+    		System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
+    	}
+    }
+    
+    /*
+     * Delete All PageRank in db
+     */
+    public void delAllPageRank() throws RocksDBException{
+    	System.out.println(">>> Deleting All PageRank...");
+    	RocksIterator iter = pagerankdb.newIterator();
+    	for(iter.seekToFirst(); iter.isValid(); iter.next()){
+    		pagerankdb.remove(new String(iter.key()).getBytes());
+        }
     }
     
     /*
@@ -438,7 +737,6 @@ public class InvertedIndex
     	String docIDList = getAllDocID();
 		String[] docs = docIDList.split(" ");
 		for(String doc:docs) {
-//			addPageRankIntoDB(doc,1.0/docs.length);
 			addPageRankIntoDB(doc,1.0);
 		}
 		System.out.println("PageRank Database Initialised");
@@ -449,9 +747,8 @@ public class InvertedIndex
      */
     public void addPageRankIntoDB(String docID, double pr) throws RocksDBException{
     	double precision = roundOff(pr,prPrecision);
-    	String index = "PR_" + docID;
     	byte[] content = (String.valueOf(precision)).getBytes();
-        db.put(index.getBytes(), content);
+    	pagerankdb.put(docID.getBytes(), content);
     }
     
     /*
@@ -486,7 +783,7 @@ public class InvertedIndex
 	    		System.out.println("!!! --- Convergence Deteced! Update Terminated at Iteration " + iter_count + " --- !!!");
 	    		break;
 	    	}
-	    	System.out.println(">>> Start Updating PageRank for Iteration" + (iter_count+1) + " <<<");
+//	    	System.out.println(">>> Start Updating PageRank for Iteration" + (iter_count+1) + " <<<");
 	    	for(int i = 0; i < new_pr_val.length;i++) {
 	    		String index = "doc" + i;
 	    		if(normalise) {
@@ -495,10 +792,7 @@ public class InvertedIndex
 	    			addPageRankIntoDB(index,new_pr_val[i]);
 	    		}
 	    	}
-//	    	printPageRankArray();
-	    	printFirstNPageRankArray(50);
-//	    	printNtoMPageRankArray(20,30);
-	    	System.out.println(">>> Finished Updating PageRank for Iteration" + (iter_count+1) + " <<<\n");
+//	    	System.out.println(">>> Finished Updating PageRank for Iteration" + (iter_count+1) + " <<<\n");
 	    	old_pr_val = new_pr_val;
     	}
     }
@@ -507,8 +801,7 @@ public class InvertedIndex
      * Get PageRank Value from DB
      */
     public double getPageRankFromDB(String docID) throws RocksDBException{
-    	String index = "PR_" + docID;
-    	byte[] content = db.get(index.getBytes());
+    	byte[] content = pagerankdb.get(docID.getBytes());
     	if(content != null){
     		String pr_str = new String(content);
     		double pr = Double.valueOf(pr_str).doubleValue();
@@ -543,34 +836,34 @@ public class InvertedIndex
     /*
      * Calculate the PageRank of all document (Without Steps)
      */
-    public void calculatePageRankInDetails(double dump_fac) throws RocksDBException{
-    	String docIDList = getAllDocID();
-		int doc_len = docIDList.split(" ").length;
-		double[] new_pr = new double[doc_len];
-		for(int i = 0;i < doc_len;i++) {
-	    	String target = "doc"+String.valueOf(i);
-			System.out.println("******************************************************");
-	    	System.out.println("Parent of " + target + ": " + getParentOfOnePage(target));
-	    	String parentDocIDList = getParentOfOnePage(target);
-			String[] parentDocs = parentDocIDList.split(" ");
-			int count = 1;
-			double content= 0;
-			System.out.println("Dumping Factor: " + dump_fac);
-			for(String parent:parentDocs) {
-				System.out.println("-------------------------------------------");
-				System.out.println("Parent " + count + ": " + parent);
-				System.out.println("PR of " + parent + " = " + getPageRankFromDB(parent));
-				System.out.println("No. of outgoing link off " + parent + " = " + getNumOfOutgoingLink(parent));
+//    public void calculatePageRankInDetails(double dump_fac) throws RocksDBException{
+//    	String docIDList = getAllDocID();
+//		int doc_len = docIDList.split(" ").length;
+//		double[] new_pr = new double[doc_len];
+//		for(int i = 0;i < doc_len;i++) {
+//	    	String target = "doc"+String.valueOf(i);
+//			System.out.println("******************************************************");
+//	    	System.out.println("Parent of " + target + ": " + getParentOfOnePage(target));
+//	    	String parentDocIDList = getParentOfOnePage(target);
+//			String[] parentDocs = parentDocIDList.split(" ");
+//			int count = 1;
+//			double content= 0;
+//			System.out.println("Dumping Factor: " + dump_fac);
+//			for(String parent:parentDocs) {
+//				System.out.println("-------------------------------------------");
+//				System.out.println("Parent " + count + ": " + parent);
+//				System.out.println("PR of " + parent + " = " + getPageRankFromDB(parent));
+//				System.out.println("No. of outgoing link off " + parent + " = " + getNumOfOutgoingLink(parent));
 //				System.out.println("item " + count + ": " + getPRDivideOutgoingLink(parent));
-				content = content + getPRDivideOutgoingLink(parent);
-				count++;
-			}
-			System.out.println("-------------------------------------------");
-			System.out.println("Overall PR of " + target + " = " + getPageRankValue(dump_fac,target));
-			new_pr[i]=roundOff(getPageRankValue(dump_fac,target),prPrecision);
-		}
-		
-    }
+//				content = content + getPRDivideOutgoingLink(parent);
+//				count++;
+//			}
+//			System.out.println("-------------------------------------------");
+//			System.out.println("Overall PR of " + target + " = " + getPageRankValue(dump_fac,target));
+//			new_pr[i]=roundOff(getPageRankValue(dump_fac,target),prPrecision);
+//		}
+//		
+//    }
 
     /*
      * Power function for PageRank
@@ -608,97 +901,34 @@ public class InvertedIndex
         
  // =========================== Other Functions ================================================
     
-    public Vector<String> getURLList()throws RocksDBException {
-    	Vector<String> urlsList = new Vector<String>();
-    	RocksIterator iter = db.newIterator();
-    	for (iter.seekToFirst(); iter.isValid(); iter.next()){
-    		String parent = new String(iter.key());
-    		
-    		// Check only Parent-Child Relationship
-    		if(parent.contains("PCR_")) {
-    			parent = parent.replace("PCR_","");
-    			// Get back the url by the docID
-    			parent = getURLbyDocID(parent);
-    			// Add parent to URL List if no exist
-    			if(!urlsList.contains(parent)) {
-    				urlsList.add(parent);
-    			}
-//    			// Add child to URL List if no exist
-//    			String value = new String(iter.value());
-//    			String[] children = value.split(" ");
-//    			for (String child:children) {
-//    				if(!urls.contains(child)) {
-//        				urls.add(child);
-//        			}
-//    			}
-    		}   	
-    	}
-    	return urlsList;
-    }
-    
+     
    /*
     * Clear the data from RocksDB
     */
-   public void clear() throws RocksDBException {
-   	RocksIterator iter = db.newIterator();
-       for(iter.seekToFirst(); iter.isValid(); iter.next()){
-           db.remove(new String(iter.key()).getBytes());
-       }
+   public void clearAll() throws RocksDBException {
+	   delAllDocMap();
+	   delAllWordMap();
+	   delAllMetadata();
+	   delAllInvertedIndex();
+	   delAllForwardIndex();
+	   delAllParentChild();
+	   delAllPageRank();
+	   System.out.println(">>> Database cleared!");
    }
    
    /*
     * Print out all data in the RocksDB
     */
    public void printAll() throws RocksDBException {
-   	// Print all the data in the hashtable
-       // ADD YOUR CODES HERE
-       RocksIterator iter = db.newIterator();
-       for(iter.seekToFirst(); iter.isValid(); iter.next()){
-           System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
-       }
+	   printAllDocMapping();
+	   printAllWordMapping();
+	   printAllMetadata();
+	   printAllInvertedIndex();
+	   printAllForwardIndex();
+	   printAllParentChild();
+	   printAllPageRank();
    }   
    
-   /*
-    * Print out data in the RocksDB
-    */
-   public void printData(String prefix) throws RocksDBException {
-   	// Print all the data in the hashtable
-       // ADD YOUR CODES HERE
-       RocksIterator iter = db.newIterator();
-       for(iter.seekToFirst(); iter.isValid(); iter.next()){
-    	   if (new String(iter.key()).contains(prefix)) {
-    		   System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
-           }
-       }
-   }
-   
-// =========================== Function for Web Query =============================
-   
-   public String query(String input) throws RocksDBException{
-	   String res = "";
-	   res = input.split(" ")[0];
-	   return res;
-   }
-   
-// =========================== Main Program ================================================   
-  
-    public static void main(String[] args)
-    {
-        try
-        {
-            // a static method that loads the RocksDB C++ library.
-            RocksDB.loadLibrary();
-            
-            // modify the path to your database
-            String path = "/db";
-
-            InvertedIndex index = new InvertedIndex(path);
-            index.clear();
-        }
-        catch(RocksDBException e)
-        {
-            System.err.println(e.toString());
-        }
-    }
+     
 }
 ;

@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+
 <%@ page import="InvIndex.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" session="true" %>
 <%@ page import="java.net.*, java.io.*, java.util.*, java.text.*, javax.servlet.*, javax.servlet.http.*, org.json.*, org.rocksdb.*, org.rocksdb.util.*"%>
-
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -54,7 +54,7 @@
     if(request.getParameter("txtname") !=null) {
         query=request.getParameter("txtname");
     } %>
-    <%-- <% InvIndex.InvertedIndex index = new InvIndex.InvertedIndex("/db"); %> --%>
+    <% InvIndex.InvertedIndex index = new InvIndex.InvertedIndex("/db"); %>
     <%-- <% String result = index.query(query); %> --%>
     <%-- <% session.setAttribute("currQuery",result); %> --%>
     

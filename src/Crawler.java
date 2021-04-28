@@ -47,11 +47,15 @@ public class Crawler {
 	private HashSet<String> urls;     // the set of urls that have been visited before
 	public Vector<Link> URLqueue; // the queue of URLs to be crawled
 //	private int max_crawl_depth = 1;  // feel free to change the depth limit of the spider.
+	private String domain;
+	private String first_url;
 	
 	Crawler(String _url) {
 		this.URLqueue = new Vector<Link>();
 		this.URLqueue.add(new Link(_url, 1));
 		this.urls = new HashSet<String>();
+		this.first_url = _url;
+		this.domain = "cse.ust.hk";
 	}
 
 	/*
@@ -100,7 +104,7 @@ public class Crawler {
 		String lang = htmlLang + bodyLang;
 
 		try {
-			index.metadata(focus.url, title, lastModified, size, lang, focus.level);
+			index.addMetadata(focus.url, title, lastModified, size, lang, focus.level);
 		} catch (RocksDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,7 +120,6 @@ public class Crawler {
 	 */
 	public Vector<String> extractWords(Document doc) {
 		 Vector<String> result = new Vector<String>();
-		// ADD YOUR CODES HERE
 		 String contents = doc.body().text(); 
 	     StringTokenizer st = new StringTokenizer(contents);
 	     while (st.hasMoreTokens()) {
@@ -170,20 +173,21 @@ public class Crawler {
 		int index = 1;
 		for(String link: links) {
 			System.out.println(String.format("Child Link %d: %s", index++, link));
-			// Check if Link has cralwed or not
+			// Check if link has cralwed or not
 			if(this.urls.contains(link)) {
-				System.out.println("Link Existed!!!!");
 				continue;
 			}
 			// Check if the child link is the relative path
-			else if(focus.url.contains("cse.ust.hk") && link.charAt(0)=='/') {
-				this.URLqueue.add(new Link(focus.url+link.substring(1), focus.level + 1)); // add links
-				System.out.println("Added Link: " + focus.url+link.substring(1));
+			else if(focus.url.contains(this.domain) && link.charAt(0)=='/') {
+				String actual_url = handleSpecialURL(focus.url,link);
+				if(this.urls.contains(actual_url)) {
+					continue;
+				}
+				this.URLqueue.add(new Link(actual_url, focus.level + 1)); // add links
 			}
 			// Check if the child link is belongs to cse domain
-			else if(link.contains("cse.ust.hk")) {
+			else if(link.contains(this.domain)) {
 				this.URLqueue.add(new Link(link, focus.level + 1)); // add links
-				System.out.println("Added Link: " + link);
 			}
 			else {
 				continue;
@@ -198,16 +202,16 @@ public class Crawler {
 		int count = 0;
 		
 		// To map the first link (i.e. https://www.cse.ust.hk/)
-		Link source_link = URLqueue.get(0);
 		Vector<String> head_link = new Vector<String>();
-		head_link.add(source_link.url);
-		docMapping(head_link, index);
+		head_link.add(this.first_url);
+		docMapping(this.first_url,head_link, index);
+		
 		
 		while(!this.URLqueue.isEmpty()) {
 			Link focus = this.URLqueue.remove(0);
 			/* start to crawl on the page */
 			try {
-				if (count++ == 100) break; // stop criteria
+				if (count++ == 10) break; // stop criteria
 				Response res = this.getResponse(focus, index);
 				Document doc = res.parse();
 				
@@ -240,7 +244,7 @@ public class Crawler {
 				printWordsAndLinks(focus, keywordFreqPair, links, doc);
 				
 				// Creating URL and docID Mapping
-				docMapping(links, index);
+				docMapping(focus.url,links, index);
 				
 				// Creating Word and WordID Mapping
 				wordMapping(words, index);
@@ -260,12 +264,23 @@ public class Crawler {
 	}
 	
 	/*
+	 *  URL Helper (handle link starting with "/"
+	 */
+	public String handleSpecialURL(String parent, String link) {
+		if(parent.contains(this.domain) && link.charAt(0)=='/') {
+			int pos = parent.indexOf(this.domain);
+			return parent.substring(0,pos+this.domain.length()+1) + link.substring(1);
+		}
+		return link;
+	}
+	
+	/*
 	 * Inverted Indexing
 	 */
 	public void invertedIndexing(String url, Set<Entry<String, Integer>> keywordFreqPair, InvertedIndex index) {
         for (Entry<String, Integer> entry : keywordFreqPair) {
 			try {
-				index.invert(url, entry.getKey(), entry.getValue());
+				index.addInvertedIndex(url, entry.getKey(), entry.getValue());
 			} catch (RocksDBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -276,11 +291,11 @@ public class Crawler {
 	/*
 	 * Document Mapping
 	 */
-	public void docMapping(Vector<String> links,InvertedIndex index){
+	public void docMapping(String p_url,Vector<String> links,InvertedIndex index){
 		for(String url: links) {
 			try {
-				String newUrl = "docMapping_" + url;
-				index.addDocMappingEntry(newUrl);
+				url = handleSpecialURL(p_url,url);
+				index.addDocMappingEntry(url);
 			} catch (RocksDBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -294,8 +309,7 @@ public class Crawler {
 	public void wordMapping(Vector<String> words, InvertedIndex index) {
 		for(String word: words) {
 			try {
-				String newWord = "wordMapping_" + word;
-				index.addWordMappingEntry(newWord);
+				index.addWordMappingEntry(word);
 			} catch (RocksDBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -309,6 +323,7 @@ public class Crawler {
 	public void parentChild(String p_url,Vector<String> children, InvertedIndex index) {
 		for(String child_url: children) {
 			try {
+				child_url = handleSpecialURL(p_url,child_url);
 				if(p_url.contains("cse.ust.hk") && child_url.contains("cse.ust.hk")) {
 					index.addPCRelation(p_url,child_url);
 				}
@@ -342,7 +357,7 @@ public class Crawler {
         Set<Entry<String, Integer>> entrySet = wordAndCount.entrySet();
         for (Entry<String, Integer> entry : entrySet) {
         	try {
-				index.forward(url, entry.getKey(), entry.getValue());
+				index.addForwardIndex(url, entry.getKey(), entry.getValue());
 			} catch (RocksDBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -361,10 +376,9 @@ public class Crawler {
              RocksDB.loadLibrary();
 
              // modify the path to your database
-             String path = "db";
 
-             index = new InvIndex.InvertedIndex(path);
-             index.clear();
+             index = new InvIndex.InvertedIndex();
+             index.clearAll();
          }
          catch(RocksDBException e)
          {
@@ -374,31 +388,28 @@ public class Crawler {
 	}
 	
 	public String getInfo(Crawler crawler,InvertedIndex index) {
-
 		String result = "";
-		int count = 1;
+//		int count = 0;
 		try {
 			HashSet<String> urls = crawler.urls;
 			for(String url: urls) {
-				Vector<String> metadata = index.getMetadata(url);
-				
+//				count++;
+//				result = result + String.valueOf(count) + index.getDocIDbyURL(url) + " Page Title: " + index.getTitlebyURL(url) + "\n";
+
 				// get the page title
-				if(metadata.size()!=0)
-					result = result + String.valueOf(count++) + "Page Title: " + metadata.get(0) + "\n";
+				result = result + "Page Title: " + index.getTitlebyURL(url) + "\n";
 		
 				// get the url
 				result = result + "URL: " + url + "\n";
 		
 				// get last modification date
-				if(metadata.size()!=0)
-					result = result + "Last Modification Date: " + metadata.get(1);
+				result = result + "Last Modification Date: " + index.getLastModifiedbyURL(url);
 		
 				// get page size
-				if(metadata.size()!=0)
-					result = result + ", Size of page: " + metadata.get(2) + "\n";
+				result = result + ", Size of page: " + index.getSizebyURL(url) + "\n\n";
 				
 				// get forward indexing keyword freq
-				result = result + index.getForward(url);
+				result = result + index.getForwardIndex(url);
 				
 				// get the child link
 				result = result + index.getPCRelation(url);
@@ -428,18 +439,18 @@ public class Crawler {
 		
 	public static void main (String[] args) {
 		InvertedIndex index = RocksDBConnection();
-		String url = "https://www.cse.ust.hk/";
-		Crawler crawler = new Crawler(url);
+		Crawler crawler = new Crawler("https://www.cse.ust.hk/");
 		crawler.crawlLoop(index);
 		try {
 			
-//			index.printAll();
-			index.printData("docMapping");
-//			index.printData("PCR");
+			index.printAll();
+//			index.printAllDocMapping();
+//			index.printAllParentChild();
+			
 			index.initPageRankValue();
-//			index.printFirstNPageRankArray(30);
 			index.updatePageRankIntoDB(0.8,10,true);
-			index.printPageRankArray();
+//			index.printFirstNPageRankArray(30);
+//			index.printPageRankArray();
 		} catch (RocksDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
