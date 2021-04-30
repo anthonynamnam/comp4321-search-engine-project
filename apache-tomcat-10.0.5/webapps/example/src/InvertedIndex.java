@@ -53,8 +53,6 @@ public class InvertedIndex {
 		this.prPrecision = 7;
 		this.thersold = 1 / power(prPrecision);
 
-		this.bigdb = RocksDB.open(this.options, "db");
-		this.openAllDB();
 	}
 
 	public String sayHaHa() {
@@ -68,6 +66,7 @@ public class InvertedIndex {
 	 */
 	public void openAllDB() throws RocksDBException {
 		try {
+			this.bigdb = RocksDB.open(this.options, "db");
 			this.docmapdb = RocksDB.open(this.options, this.db1);
 			this.wordmapdb = RocksDB.open(this.options, this.db2);
 			this.inverteddb = RocksDB.open(this.options, this.db3);
@@ -85,6 +84,7 @@ public class InvertedIndex {
 	 */
 	public void closeAllDB() {
 		try {
+			this.bigdb.close();
 			this.docmapdb.close();
 			this.wordmapdb.close();
 			this.inverteddb.close();
@@ -438,7 +438,8 @@ public class InvertedIndex {
 	 * "doc0:2 doc2:5")
 	 */
 	public String getInvertedIndexByWord(String word) throws RocksDBException {
-		byte[] content = inverteddb.get(word.getBytes());
+		String wordID = getWordIDbyWord(word);
+		byte[] content = inverteddb.get(wordID.getBytes());
 		String data = " ";
 		if (content != null) {
 			data = new String(content);
@@ -447,7 +448,9 @@ public class InvertedIndex {
 		return data;
 	}
 
-	/*
+	
+	/* 
+	 * 
 	 * Get frequency of term (word) in document (docID)
 	 */
 	public int getTF(String word, String docID) throws RocksDBException {
@@ -508,9 +511,11 @@ public class InvertedIndex {
 		// getInvertedIndex for all queries in a for loop
 		for (int i = 0; i < querySplit.length; i++) {
 			String queryInvInd = this.getInvertedIndexByWord(querySplit[i]);
+			System.out.println(queryInvInd);
 			// hello -> doc0:3 doc1:3 ...
 			// world -> empty
 			if (!queryInvInd.equals("empty")) {
+				System.out.println("Processing...");
 				String[] invIndSplit = queryInvInd.split(" ");
 				// hello -> [doc0:3, doc1:3, ...]
 				for (int j = 0; j < invIndSplit.length; j++) {

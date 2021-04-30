@@ -81,7 +81,7 @@
                             <div class="card resultCard">
                                 <div class="card-body">
                                     <h4 class="card-title">
-                                      <%-- <% s.getAllDocID();%> --%>
+                                      Hello
                                     </h4>
                                     <h6 class="text-muted card-subtitle mb-2">Subtitle</h6>
                                     <p class="card-text">Search text goes here</p><a class="card-link"

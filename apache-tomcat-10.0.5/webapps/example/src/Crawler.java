@@ -394,6 +394,7 @@ public class Crawler {
 
 			index = new InvertedIndex(path);
 			// index.clearAll();
+			index.openAllDB();
 		} catch (RocksDBException e) {
 			System.err.println(e.toString());
 		}
@@ -453,7 +454,7 @@ public class Crawler {
 		boolean continued = true;
 		// Ask for Action
 		while (continued) {
-			Scanner sc = new Scanner(System.in); // System.in is a standard input stream
+			Scanner input1 = new Scanner(System.in); // System.in is a standard input stream
 			System.out.println("============================");
 			System.out.println("What do you want?");
 			System.out.println("Start Crawling => 1");
@@ -464,8 +465,7 @@ public class Crawler {
 			System.out.println("End Program => 0");
 			System.out.println("============================");
 			System.out.print("Enter your choice - ");
-			int choice = sc.nextInt();
-
+			int choice = input1.nextInt();
 			switch (choice) {
 				case 0:
 					continued = false;
@@ -478,8 +478,9 @@ public class Crawler {
 					break;
 				case 2:
 					try {
-						System.out.print("Please input your query");
-						String inputQuery = sc.nextLine();
+						Scanner input2 = new Scanner(System.in);
+						System.out.print("Please input your query: ");
+						String inputQuery = input2.nextLine();
 						index.rankingAlgorithm(inputQuery, 100);
 					} catch (RocksDBException e) {
 						e.printStackTrace();
