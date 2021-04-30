@@ -231,9 +231,12 @@ public class InvertedIndex {
 	 */
 	public String getWordIDbyWord(String word) throws RocksDBException {
 		byte[] content = wordmapdb.get(word.getBytes());
-		return new String(content);
-	}
-
+		if (content != null){
+			return new String(content);
+		}
+		return "";
+	}	 
+	 
 	/*
 	 * Get the Word by the Word ID (e.g. "word1" returns "abd")
 	 */
@@ -440,7 +443,7 @@ public class InvertedIndex {
 	public String getInvertedIndexByWord(String word) throws RocksDBException {
 		String wordID = getWordIDbyWord(word);
 		byte[] content = inverteddb.get(wordID.getBytes());
-		String data = " ";
+		String data = "";
 		if (content != null) {
 			data = new String(content);
 		} else
@@ -511,11 +514,9 @@ public class InvertedIndex {
 		// getInvertedIndex for all queries in a for loop
 		for (int i = 0; i < querySplit.length; i++) {
 			String queryInvInd = this.getInvertedIndexByWord(querySplit[i]);
-			System.out.println(queryInvInd);
 			// hello -> doc0:3 doc1:3 ...
 			// world -> empty
 			if (!queryInvInd.equals("empty")) {
-				System.out.println("Processing...");
 				String[] invIndSplit = queryInvInd.split(" ");
 				// hello -> [doc0:3, doc1:3, ...]
 				for (int j = 0; j < invIndSplit.length; j++) {
@@ -534,11 +535,11 @@ public class InvertedIndex {
 							ranking.put(s,
 									ranking.get(s) + calculateCosineSimilarity(s, termWeight, querySplit.length));
 						}
-					}
-				}
-			}
-		}
 
+					} 
+				}
+			} 
+		}
 		// finally sort the hashmap and return for rendering
 		Map<String, Double> sortedRanking = ranking.entrySet().stream().sorted(Entry.comparingByValue())
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
