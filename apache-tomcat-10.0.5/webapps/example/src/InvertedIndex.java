@@ -4,6 +4,11 @@ import org.rocksdb.*;
 
 import java.util.Set;
 import java.util.Vector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.rocksdb.Options;
@@ -580,7 +585,6 @@ public class InvertedIndex {
 	 */
 	public void addForwardIndex(String url, String word, int count) throws RocksDBException {
 		String docID = getDocIDbyURL(url);
-		String wordID = getWordIDbyWord(word);
 		byte[] content = forwarddb.get(docID.getBytes());
 		if (content != null) {
 			boolean updated = false;
@@ -591,9 +595,9 @@ public class InvertedIndex {
 				String w = pair[0];
 				String f = pair[1];
 				// Check if the record exists
-				if (w.equals(wordID)) {
+				if (w.equals(word)) {
 					// Need Update
-					update_freq = update_freq + wordID + ":" + String.valueOf(count) + " ";
+					update_freq = update_freq + word + ":" + String.valueOf(count) + " ";
 					updated = true;
 				} else {
 					// No need update
@@ -602,12 +606,12 @@ public class InvertedIndex {
 			}
 			// If have not update, append it
 			if (!updated) {
-				update_freq = update_freq + wordID + ":" + String.valueOf(count) + " ";
+				update_freq = update_freq + word + ":" + String.valueOf(count) + " ";
 			}
 			content = (update_freq).getBytes();
 		} else {
 			// Add new forward indexing for the docID
-			content = (wordID + ":" + String.valueOf(count)).getBytes();
+			content = (word + ":" + String.valueOf(count)).getBytes();
 		}
 		forwarddb.put(docID.getBytes(), content);
 	}
@@ -638,7 +642,7 @@ public class InvertedIndex {
 	 * Get data in forward index by docID (just the number)
 	 */
 	public String getForwardByDocID(String docID) throws RocksDBException {
-		byte[] content = forwarddb.get(sdocIDtr.getBytes());
+		byte[] content = forwarddb.get(docID.getBytes());
 		String result = "";
 		if (content != null) {
 			result = new String(content);

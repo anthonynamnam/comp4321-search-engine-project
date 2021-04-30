@@ -477,9 +477,13 @@ public class Crawler {
 					crawler.crawlLoop(index);
 					break;
 				case 2:
-					System.out.println("Please input your query");
-					String inputQuery = sc.nextLine();
-					rankingAlgorithm(rankingAlgorithm, 100);
+					try {
+						System.out.print("Please input your query");
+						String inputQuery = sc.nextLine();
+						index.rankingAlgorithm(inputQuery, 100);
+					} catch (RocksDBException e) {
+						e.printStackTrace();
+					}
 					break;
 				case 3:
 					try {
