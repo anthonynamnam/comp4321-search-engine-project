@@ -1,4 +1,9 @@
-# 4321-repo
+# COMP4321 Search Engine Project - Spring 2021
+
+# Team Members:
+  1. KWOK, Ue Nam   (SID:20597580)
+  2. YOON,
+  3. TSUI,
 
 # Compilation
 
