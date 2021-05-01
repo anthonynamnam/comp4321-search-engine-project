@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import static java.util.Collections.reverseOrder;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -457,20 +458,13 @@ public class InvertedIndex {
 	 * Get frequency of term (word) in document (docID)
 	 */
 	public int getTF(String word, String docID) throws RocksDBException {
-		String invind = getInvertedIndexByWord(word);
-		if (invind.equals("empty")) {
-			return 0;
-		}
-		// Iterate through each pair of doc:freq
-		String[] docFreqPairs = invind.split(" ");
-		for (String docFreqPair : docFreqPairs) {
-			String thisDocID = docFreqPair.split(":")[0];
-			// Check if the docID matches
-			if (thisDocID.equals(docID)) {
-				return Integer.parseInt(docFreqPair.split(":")[1]);
-			}
-		}
-		return 0;
+		String invind = this.getForwardByDocID(docID);
+    	if(invind.equals("empty")) {
+    		return 0;
+    	}
+    	invind = invind.substring(invind.indexOf(word));
+    	invind = invind.substring(invind.indexOf(":")+1, invind.indexOf(" "));
+    	return Integer.parseInt(invind);
 	}
 
 	/*
@@ -514,35 +508,35 @@ public class InvertedIndex {
 		// getInvertedIndex for all queries in a for loop
 		for (int i = 0; i < querySplit.length; i++) {
 			String queryInvInd = this.getInvertedIndexByWord(querySplit[i]);
-			// hello -> doc0:3 doc1:3 ...
-			// world -> empty
+			// hello -> empty
+			// world -> doc0:2 doc16:1 
 			if (!queryInvInd.equals("empty")) {
 				String[] invIndSplit = queryInvInd.split(" ");
-				// hello -> [doc0:3, doc1:3, ...]
+				// world -> [doc0:2, doc16:1]
 				for (int j = 0; j < invIndSplit.length; j++) {
 					String s = invIndSplit[j].substring(invIndSplit[j].indexOf("c") + 1);
 					s = s.substring(0, s.indexOf(":"));
 					// s = docID, just the number
-					ranking.put(s, 0.0);
+					if(!ranking.containsKey(s)) ranking.put(s, 0.0);
 					// s is now one docID (int) that has at least a word in query
 					// find s score and put into ranking array
 					String forwardList = this.getForwardByDocID(s);
-					for (int b = 0; b < querySplit.length; b++) {
-						if (forwardList.contains(querySplit[b] + ":")) {
-							// scoring
-							// calculate term weight of document terms here
-							double termWeight = (this.getTF(querySplit[b], s) * calculateIDF(querySplit[b], s, N));
-							ranking.put(s,
-									ranking.get(s) + calculateCosineSimilarity(s, termWeight, querySplit.length));
-						}
+					if (forwardList.contains(querySplit[i])) {
+						// scoring
+						// calculate term weight of document terms here
+						double termWeight = (this.getTF(querySplit[i], s) * calculateIDF(querySplit[i], s, N));
+						System.out.println(querySplit[i]);
+						System.out.println(this.getTF(querySplit[i], s));
+						System.out.println(calculateIDF(querySplit[i], s, N));
+						ranking.put(s,
+								ranking.get(s) + termWeight);
+					}
 
-					} 
 				}
 			} 
 		}
 		// finally sort the hashmap and return for rendering
-		Map<String, Double> sortedRanking = ranking.entrySet().stream().sorted(Entry.comparingByValue())
-				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		Map<String, Double> sortedRanking = ranking.entrySet().stream().sorted(reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		// print to console for debugging
 		sortedRanking.entrySet().forEach(entry -> {
@@ -648,7 +642,8 @@ public class InvertedIndex {
 	 * Get data in forward index by docID (just the number)
 	 */
 	public String getForwardByDocID(String docID) throws RocksDBException {
-		byte[] content = forwarddb.get(docID.getBytes());
+		String str = "doc"+docID;
+		byte[] content = forwarddb.get(str.getBytes());
 		String result = "";
 		if (content != null) {
 			result = new String(content);
