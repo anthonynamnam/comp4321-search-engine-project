@@ -25,4 +25,5 @@ public class DbHandler {
 	public void close() {
 		this.db.close();
 	}
+
 }

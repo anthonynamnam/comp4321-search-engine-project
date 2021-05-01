@@ -456,3 +456,26 @@ NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED -
 01-May-2021 01:53:43.013 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/host-manager] has finished in [29] ms
 01-May-2021 01:53:43.018 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
 01-May-2021 01:53:43.052 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [1115] milliseconds
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619878285 acquiring thread 123145349341184: ../webapps/example/db/database/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880013 acquiring thread 123145353584640: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880013 acquiring thread 123145353584640: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available

@@ -1,1 +1,0 @@
-This folder is for all external jar files. Move the lib folder of your project and other jar files to be used in jsp here.

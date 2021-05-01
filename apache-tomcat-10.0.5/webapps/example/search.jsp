@@ -50,15 +50,6 @@
     <!------------ Display Result ------------>
     <div>
       <%
-        InvertedIndex s = new InvertedIndex();
-        out.println("<div>" + s.sayHaHa() + " WOWOWOWOWOWO" + "</div>");
-        String path = "database";
-        DbHandler handler = new DbHandler(path);
-        // You will see a newly created rocksdb called database under bin/ folder.
-        out.println("<div>" + handler.sayHi() + " Successfully use database handler." + "</div>");
-        handler.close();
-        // remember to close database
-        
         StopStem stopstem = new StopStem("stopwords-en.txt"); // Put this file under bin/ folder since it is the working folder at the moment.
         if(request.getParameter("userInput")!=null) {
         	String query = request.getParameter("userInput");
@@ -67,6 +58,16 @@
 		} else {
 			out.println("You input nothing.");
 		}                
+
+        String path = "../webapps/example/db/doc";
+        DbHandler handler = new DbHandler(path);
+        // You will see a newly created rocksdb called database under bin/ folder.
+        out.println("<div>" + handler.sayHi() + " Successfully use database handler." + "</div>");
+        
+        // remember to close database
+        // out.println("<div>" + handler.getAllDocID() + "</div>");
+        handler.close();
+        
       %>
       
 

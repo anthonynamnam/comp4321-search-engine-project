@@ -15,9 +15,10 @@ import java.util.Map.Entry;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
+import org.rocksdb.Status;
 
 public class InvertedIndex {
-	private RocksDB bigdb;
+	// private RocksDB bigdb;
 	private RocksDB docmapdb;
 	private RocksDB wordmapdb;
 	private RocksDB inverteddb;
@@ -27,6 +28,8 @@ public class InvertedIndex {
 	private RocksDB pagerankdb;
 
 	private Options options;
+
+	private Status s1;
 
 	private String db1 = "db/doc";
 	private String db2 = "db/word";
@@ -53,7 +56,8 @@ public class InvertedIndex {
 		this.thersold = 1 / power(prPrecision);
 	}
 
-	public String sayHaHa() {
+	public String sayHaHa(String query, int N) throws RocksDBException {
+		// this.rankingAlgorithm(query, N);
 		return "No Error";
 	}
 
@@ -62,7 +66,7 @@ public class InvertedIndex {
 	// Open all database connection
 	public void openAllDB() throws RocksDBException {
 		try {
-			this.bigdb = RocksDB.open(this.options, "db");
+			// this.bigdb = RocksDB.open(this.options, "db");
 			this.docmapdb = RocksDB.open(this.options, this.db1);
 			this.wordmapdb = RocksDB.open(this.options, this.db2);
 			this.inverteddb = RocksDB.open(this.options, this.db3);
@@ -78,6 +82,7 @@ public class InvertedIndex {
 	// Close all database connection
 	public void closeAllDB() {
 		// try {
+
 		this.docmapdb.close();
 		this.wordmapdb.close();
 		this.inverteddb.close();
@@ -85,7 +90,8 @@ public class InvertedIndex {
 		this.metadatadb.close();
 		this.parentchilddb.close();
 		this.pagerankdb.close();
-		this.bigdb.close();
+
+		// this.bigdb.close();
 		// } catch (RocksDBException e) {
 		// System.err.println(e.toString());
 		// }
@@ -116,6 +122,12 @@ public class InvertedIndex {
 			docIDList = docIDList + new String(iter.value()) + " ";
 		}
 		return docIDList;
+	}
+
+	// Get the Number of Document in db
+	public int getNumOfDoc() throws RocksDBException {
+		String docIDList = getAllDocID();
+		return docIDList.split(" ").length;
 	}
 
 	// Get the Doc ID by the URL (e.g. "https://www.cse.ust.hk/" returns "doc0")
