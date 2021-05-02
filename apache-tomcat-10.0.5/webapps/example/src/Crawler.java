@@ -230,7 +230,7 @@ public class Crawler {
 			Link focus = this.URLqueue.remove(0);
 			/* start to crawl on the page */
 			try {
-				if (count++ == 10)
+				if (count++ == 50)
 					break; // stop criteria
 				Response res = this.getResponse(focus, index);
 				Document doc = res.parse();

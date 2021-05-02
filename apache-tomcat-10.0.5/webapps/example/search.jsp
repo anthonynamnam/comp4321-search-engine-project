@@ -55,30 +55,25 @@
         if(request.getParameter("userInput")!=null) {
         	query = request.getParameter("userInput");
 			out.println("<div> <br><br><br> Your input: "+ query + "</div>");
-			out.println("<div> Stem: " + stopstem.stem(query)  + "</div>");
+            String[] splitted = query.split(" ");
+            for (int i = 0; i < splitted.length; i++){
+                splitted[i] = stopstem.stem(splitted[i]);
+            }
+            query = String.join(" ",splitted);
+			out.println("<div> Stem: " + query  + "</div>");
 		} else {
 			out.println("You input nothing.");
 		}                
 
-        // String path = "../webapps/example/db/doc";
-        // DbHandler handler = new DbHandler(path);
-        // You will see a newly created rocksdb called database under bin/ folder.
         out.println("<div> Successfully use database handler." + "</div>");
-        
-        // remember to close database
-        // handler.close();
-        
+
         InvertedIndex inv = new InvertedIndex();
         Map<String, Double> result = new HashMap<String, Double>();
         
         inv.openAllDB();
-        inv.sayHaHa(query);
         result = inv.rankingAlgorithm(query);
-        //for(Map.Entry<String, Double> entry : result.entrySet()){
-        //    out.println("<div>" + "docID = " + entry.getKey() + " score = " + entry.getValue() + "</div>");
-        //}
-        inv.closeAllDB();
       %>
+      
     
     </div>
     
@@ -92,11 +87,12 @@
                                 <div class="card resultCard">
                                     <div class="card-body">
                                         <h4 class="card-title">
-                                            DocID: <% out.println(entry.getKey()); %>
+                                            <% String url = inv.getURLbyDocID("doc" + entry.getKey()); %>
+                                            Title: <% out.println(inv.getTitlebyURL(url)); %>
                                         </h4>
                                         <h6 class="text-muted card-subtitle mb-2">Subtitle</h6>
-                                        <p class="card-text">Score: <% out.println(entry.getValue()); %></p><a class="card-link"
-                                            href="#">Link</a><a class="card-link" href="#">Link</a>
+                                        <p class="card-text">Score: <% out.println(entry.getValue()); %></p>
+                                        <a class="card-link" href="<%=url%>" >Go to site</a>
                                     </div>
                                 </div>
                             </div>
@@ -105,6 +101,10 @@
                 </div>
             </div>
         </header>
+
+        <!-- Close Database -->
+        <% inv.closeAllDB();%>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>

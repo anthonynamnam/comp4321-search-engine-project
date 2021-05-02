@@ -117,10 +117,10 @@ public class InvertedIndex {
 	public String getAllDocID() throws RocksDBException {
 		String docIDList = "";
 		RocksIterator iter = docmapdb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			docIDList = docIDList + new String(iter.value()) + " ";
 		}
+		iter.close();
 		return docIDList;
 	}
 
@@ -154,6 +154,7 @@ public class InvertedIndex {
 				return new String(iter.key());
 			}
 		}
+		iter.close();
 		return "";
 	}
 
@@ -172,21 +173,21 @@ public class InvertedIndex {
 	public void delAllDocMap() throws RocksDBException {
 		System.out.println(">>> Deleting All Doc Mapping...");
 		RocksIterator iter = docmapdb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			docmapdb.remove(new String(iter.key()).getBytes());
 		}
-
+		iter.close();
 	}
 
 	// Print out All Document Mapping pairs
 	public void printAllDocMapping() throws RocksDBException {
 		System.out.println(">>> Printing All Doc Mapping...");
 		RocksIterator iter = docmapdb.newIterator();
-		;
+
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
 		}
+		iter.close();
 	}
 
 	// ========== Word Mapping Part ==========
@@ -963,75 +964,6 @@ public class InvertedIndex {
 	}
 
 	// ========== Other Functions ==========
-
-	// Check if all database are empty
-	public boolean isAllEmpty() throws RocksDBException {
-		if (!isDBEmpty("docmap")) {
-			return false;
-		}
-		if (!isDBEmpty("wordmap")) {
-			return false;
-		}
-		if (!isDBEmpty("metadata")) {
-			return false;
-		}
-		if (!isDBEmpty("inverted")) {
-			return false;
-		}
-		if (!isDBEmpty("forward")) {
-			return false;
-		}
-		if (!isDBEmpty("parentchild")) {
-			return false;
-		}
-		if (!isDBEmpty("pagerank")) {
-			return false;
-		}
-		return true;
-	}
-
-	// Check if that database is empty
-	public boolean isDBEmpty(String dbName) throws RocksDBException {
-		RocksIterator iter;
-		switch (dbName) {
-			case "docmap":
-				iter = docmapdb.newIterator();
-				;
-				break;
-			case "wordmap":
-				iter = wordmapdb.newIterator();
-				;
-				break;
-			case "metadata":
-				iter = metadatadb.newIterator();
-				;
-				break;
-			case "inverted":
-				iter = inverteddb.newIterator();
-				;
-				break;
-			case "forward":
-				iter = forwarddb.newIterator();
-				;
-				break;
-			case "parentchild":
-				iter = parentchilddb.newIterator();
-				;
-				break;
-			case "pagerank":
-				iter = pagerankdb.newIterator();
-				;
-				break;
-			default:
-				iter = docmapdb.newIterator();
-				;
-		}
-		iter.seekToFirst();
-		if (!iter.isValid() || iter == null) {
-			return false;
-		}
-		return true;
-	}
 
 	// Clear the data from RocksDB
 	public void clearAll() throws RocksDBException {
