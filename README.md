@@ -2,8 +2,8 @@
 
 # Team Members:
   1. KWOK, Ue Nam   (SID:20597580)
-  2. YOON,
-  3. TSUI,
+  2. YOON, Han Byul (SID:20385808)
+  3. TSUI, Yuen Yau (SID:20607488)
 
 # Compilation
 
