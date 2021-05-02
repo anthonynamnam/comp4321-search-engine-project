@@ -54,24 +54,27 @@
         String query = "";
         if(request.getParameter("userInput")!=null) {
         	query = request.getParameter("userInput");
-			out.println("<div> <br><br><br> Your input: "+ query + "</div>");
+            // out.println("<br><br><br><div> Your input: "+ query + "</div>");
             String[] splitted = query.split(" ");
             for (int i = 0; i < splitted.length; i++){
                 splitted[i] = stopstem.stem(splitted[i]);
             }
             query = String.join(" ",splitted);
-			out.println("<div> Stem: " + query  + "</div>");
+			// out.println("<div> Stem: " + query  + "</div>");
 		} else {
 			out.println("You input nothing.");
-		}                
-
-        out.println("<div> Successfully use database handler." + "</div>");
+		}       
 
         InvertedIndex inv = new InvertedIndex();
-        Map<String, Double> result = new HashMap<String, Double>();
-        
         inv.openAllDB();
-        result = inv.rankingAlgorithm(query);
+        
+        // out.println("<div>" + inv.sayHaHa(query) + "</div>");
+        Map<String, Double> result = inv.rankingAlgorithm(query);
+        //for(Map.Entry<String, Double> entry : result.entrySet()){
+        //    String url = inv.getURLbyDocID("doc" + entry.getKey());
+        //    out.println(inv.getTitlebyURL(url));
+        //}
+        //    out.println("<div>" + result.isEmpty() + "</div>");
       %>
       
     

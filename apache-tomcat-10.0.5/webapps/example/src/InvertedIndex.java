@@ -19,7 +19,6 @@ import org.rocksdb.RocksIterator;
 import org.rocksdb.Status;
 
 public class InvertedIndex {
-	// private RocksDB bigdb;
 	private RocksDB docmapdb;
 	private RocksDB wordmapdb;
 	private RocksDB inverteddb;
@@ -30,15 +29,14 @@ public class InvertedIndex {
 
 	private Options options;
 
-	private Status s1;
-
-	private String db1 = "db/doc";
-	private String db2 = "db/word";
-	private String db3 = "db/invert";
-	private String db4 = "db/forward";
-	private String db5 = "db/metadata";
-	private String db6 = "db/parentchild";
-	private String db7 = "db/pagerank";
+	private String main_path = "/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/example/";
+	private String db1 = main_path + "db/doc";
+	private String db2 = main_path + "db/word";
+	private String db3 = main_path + "db/invert";
+	private String db4 = main_path + "db/forward";
+	private String db5 = main_path + "db/metadata";
+	private String db6 = main_path + "db/parentchild";
+	private String db7 = main_path + "db/pagerank";
 
 	private int wordNextID;
 	private int docNextID;
@@ -58,7 +56,7 @@ public class InvertedIndex {
 	}
 
 	public String sayHaHa(String query) throws RocksDBException {
-		return "No Error";
+		return "No Error" + query;
 	}
 
 	// ========== Data Security ==========
@@ -66,7 +64,6 @@ public class InvertedIndex {
 	// Open all database connection
 	public void openAllDB() throws RocksDBException {
 		try {
-			// this.bigdb = RocksDB.open(this.options, "db");
 			this.docmapdb = RocksDB.open(this.options, this.db1);
 			this.wordmapdb = RocksDB.open(this.options, this.db2);
 			this.inverteddb = RocksDB.open(this.options, this.db3);
@@ -81,8 +78,6 @@ public class InvertedIndex {
 
 	// Close all database connection
 	public void closeAllDB() {
-		// try {
-
 		this.docmapdb.close();
 		this.wordmapdb.close();
 		this.inverteddb.close();
@@ -90,11 +85,7 @@ public class InvertedIndex {
 		this.metadatadb.close();
 		this.parentchilddb.close();
 		this.pagerankdb.close();
-
-		// this.bigdb.close();
-		// } catch (RocksDBException e) {
-		// System.err.println(e.toString());
-		// }
+		System.out.println("Database Closed!!!");
 	}
 
 	// ========== Document Mapping Part ==========
@@ -183,7 +174,6 @@ public class InvertedIndex {
 	public void printAllDocMapping() throws RocksDBException {
 		System.out.println(">>> Printing All Doc Mapping...");
 		RocksIterator iter = docmapdb.newIterator();
-
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
 		}
@@ -209,11 +199,11 @@ public class InvertedIndex {
 	// Get all existing Word ID (e.g. "word1 word5 word2")
 	public String getAllWordID() throws RocksDBException {
 		RocksIterator iter = wordmapdb.newIterator();
-		;
 		String docIDList = "";
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			docIDList = docIDList + new String(iter.value()) + " ";
 		}
+		iter.close();
 		return docIDList;
 	}
 
@@ -229,12 +219,12 @@ public class InvertedIndex {
 	// Get the Word by the Word ID (e.g. "word1" returns "abd")
 	public String getWordbyWordID(String wordID) throws RocksDBException {
 		RocksIterator iter = wordmapdb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			if (new String(iter.value()).equals(wordID)) {
 				return new String(iter.key());
 			}
 		}
+		iter.close();
 		return "";
 	}
 
@@ -253,20 +243,20 @@ public class InvertedIndex {
 	public void delAllWordMap() throws RocksDBException {
 		System.out.println(">>> Deleting All Word Mapping...");
 		RocksIterator iter = wordmapdb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			wordmapdb.remove(new String(iter.key()).getBytes());
 		}
+		iter.close();
 	}
 
 	// Print out All Word Mapping pairs
 	public void printAllWordMapping() throws RocksDBException {
 		System.out.println(">>> Printing All Word Mapping...");
 		RocksIterator iter = wordmapdb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
 		}
+		iter.close();
 	}
 
 	// ========== Metadata Part ==========
@@ -335,20 +325,20 @@ public class InvertedIndex {
 	public void delAllMetadata() throws RocksDBException {
 		System.out.println(">>> Deleting All Metadata...");
 		RocksIterator iter = metadatadb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			metadatadb.remove(new String(iter.key()).getBytes());
 		}
+		iter.close();
 	}
 
 	// Print out All Metadata
 	public void printAllMetadata() throws RocksDBException {
 		System.out.println(">>> Printing All Metadata...");
 		RocksIterator iter = metadatadb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
 		}
+		iter.close();
 	}
 
 	// Print out All Metadata by Doc ID
@@ -405,6 +395,9 @@ public class InvertedIndex {
 	// doc2:5")
 	public String getInvertedIndexByWord(String word) throws RocksDBException {
 		String wordID = getWordIDbyWord(word);
+		if (wordID.equals("")) {
+			return "empty";
+		}
 		byte[] content = inverteddb.get(wordID.getBytes());
 		String data = "";
 		if (content != null) {
@@ -449,7 +442,10 @@ public class InvertedIndex {
 	// return ranking based on cosine similarity
 	public Map<String, Double> rankingAlgorithm(String query) throws RocksDBException {
 		// docID, score key-value pair for ranking
+		double sim_weight = 0.8;
+		double pr_weight = 1 - sim_weight;
 		int N = this.getNumOfDoc();
+
 		Map<String, Double> ranking;
 		ranking = new HashMap<String, Double>();
 
@@ -487,7 +483,10 @@ public class InvertedIndex {
 						// divide by |doc| and put cosSim into ranking
 						double docLength = maxTFAndDocLength[1];
 						double cosSim = termWeight / docLength;
-						ranking.put(s, ranking.get(s) + cosSim);
+
+						// Calculate the weighted score
+						double weighted_score = cosSim * sim_weight + getPageRankFromDB("doc" + s) * pr_weight;
+						ranking.put(s, ranking.get(s) + weighted_score);
 					}
 
 				}
@@ -537,10 +536,10 @@ public class InvertedIndex {
 	public void delAllInvertedIndex() throws RocksDBException {
 		System.out.println(">>> Deleting All Inverted Index...");
 		RocksIterator iter = inverteddb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			inverteddb.remove(new String(iter.key()).getBytes());
 		}
+		iter.close();
 	}
 
 	// Print out All Inverted Index
@@ -548,10 +547,10 @@ public class InvertedIndex {
 	public void printAllInvertedIndex() throws RocksDBException {
 		System.out.println(">>> Printing All Inverted Index...");
 		RocksIterator iter = inverteddb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
 		}
+		iter.close();
 	}
 
 	// Print out All Inverted Index by Word ID
@@ -649,20 +648,20 @@ public class InvertedIndex {
 	public void delAllForwardIndex() throws RocksDBException {
 		System.out.println(">>> Deleting All Forward Index...");
 		RocksIterator iter = forwarddb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			forwarddb.remove(new String(iter.key()).getBytes());
 		}
+		iter.close();
 	}
 
 	// Print out All Forward Index
 	public void printAllForwardIndex() throws RocksDBException {
 		System.out.println(">>> Printing All Forward Index...");
 		RocksIterator iter = forwarddb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
 		}
+		iter.close();
 	}
 
 	// Print out All Forward Index by Doc ID
@@ -716,20 +715,20 @@ public class InvertedIndex {
 	public void printAllParentChild() throws RocksDBException {
 		System.out.println(">>> Printing All Parent Child Relation...");
 		RocksIterator iter = parentchilddb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
 		}
+		iter.close();
 	}
 
 	// Print out All Parent Child Relation
 	public void delAllParentChild() throws RocksDBException {
 		System.out.println(">>> Deleting All Parent Child Relation...");
 		RocksIterator iter = parentchilddb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			parentchilddb.remove(new String(iter.key()).getBytes());
 		}
+		iter.close();
 	}
 
 	// Check if the doc ID has the child doc ID
@@ -802,20 +801,20 @@ public class InvertedIndex {
 	public void printAllPageRank() throws RocksDBException {
 		System.out.println(">>> Printing All PageRank...");
 		RocksIterator iter = pagerankdb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + " = " + new String(iter.value()));
 		}
+		iter.close();
 	}
 
 	// Delete All PageRank in db
 	public void delAllPageRank() throws RocksDBException {
 		System.out.println(">>> Deleting All PageRank...");
 		RocksIterator iter = pagerankdb.newIterator();
-		;
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			pagerankdb.remove(new String(iter.key()).getBytes());
 		}
+		iter.close();
 	}
 
 	// Print PageRank Array

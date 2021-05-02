@@ -466,7 +466,6 @@ public class Crawler {
 				case 0:
 					continued = false;
 					System.out.println("Closing DB...");
-					index.closeAllDB();
 					break;
 				case 1:
 					System.out.println("Crawling Website...");
@@ -512,7 +511,7 @@ public class Crawler {
 		String final_output = crawler.getInfo(crawler, index);
 		crawler.outputTXT(final_output);
 		System.out.println("\nSuccessfully Returned");
-
+		index.closeAllDB();
 	}
 
 };

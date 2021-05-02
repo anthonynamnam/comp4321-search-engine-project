@@ -1,0 +1,7 @@
+0:0:0:0:0:0:0:1 - - [02/May/2021:21:16:34 +0800] "GET /example/index.html HTTP/1.1" 200 5391
+0:0:0:0:0:0:0:1 - - [02/May/2021:21:16:35 +0800] "GET /example/index.html HTTP/1.1" 200 5391
+0:0:0:0:0:0:0:1 - - [02/May/2021:21:16:44 +0800] "POST /example/search.jsp HTTP/1.1" 200 9451
+0:0:0:0:0:0:0:1 - - [02/May/2021:21:17:13 +0800] "POST /example/search.jsp HTTP/1.1" 200 82356
+0:0:0:0:0:0:0:1 - - [02/May/2021:21:17:42 +0800] "POST /example/search.jsp HTTP/1.1" 200 82183
+0:0:0:0:0:0:0:1 - - [02/May/2021:21:17:57 +0800] "POST /example/search.jsp HTTP/1.1" 200 81394
+0:0:0:0:0:0:0:1 - - [02/May/2021:21:21:21 +0800] "POST /example/search.jsp HTTP/1.1" 200 81394

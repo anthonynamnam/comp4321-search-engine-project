@@ -479,3 +479,485 @@ org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880
 org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
 org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
 org.rocksdb.RocksDBException: lock hold by current process, acquire time 1619880167 acquiring thread 123145352523776: ../webapps/example/db/doc/LOCK: No locks available
+NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+02-May-2021 21:16:32.640 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.0.5
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2021 08:19:50 UTC
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.0.5.0
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.16
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           11.0.10+9
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            AdoptOpenJDK
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+02-May-2021 21:16:32.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+02-May-2021 21:16:32.651 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+02-May-2021 21:16:32.651 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+02-May-2021 21:16:32.651 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/conf/logging.properties
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dorg.apache.catalina.security.SecurityListener.UMASK=0027
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5
+02-May-2021 21:16:32.652 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/temp
+02-May-2021 21:16:32.654 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The Apache Tomcat Native library which allows using OpenSSL was not found on the java.library.path: [/Users/anthonykwok/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
+02-May-2021 21:16:32.832 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+02-May-2021 21:16:32.858 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [321] milliseconds
+02-May-2021 21:16:32.887 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+02-May-2021 21:16:32.888 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.0.5]
+02-May-2021 21:16:32.892 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/example]
+02-May-2021 21:16:33.446 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+02-May-2021 21:16:33.465 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/example] has finished in [572] ms
+02-May-2021 21:16:33.465 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/docs]
+02-May-2021 21:16:33.718 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+02-May-2021 21:16:33.719 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/docs] has finished in [254] ms
+02-May-2021 21:16:33.719 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/manager]
+02-May-2021 21:16:33.959 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+02-May-2021 21:16:33.962 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/manager] has finished in [243] ms
+02-May-2021 21:16:33.963 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/ROOT]
+02-May-2021 21:16:34.284 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+02-May-2021 21:16:34.285 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/ROOT] has finished in [323] ms
+02-May-2021 21:16:34.285 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/host-manager]
+02-May-2021 21:16:34.541 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+02-May-2021 21:16:34.543 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/anthonykwok/Documents/Academic/HKUST/Year 2020-2021 (DSCT Yr 3)/2021 Spring Semester Course/COMP4321/Project/4321-repo/apache-tomcat-10.0.5/webapps/host-manager] has finished in [257] ms
+02-May-2021 21:16:34.546 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+02-May-2021 21:16:34.555 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [1696] milliseconds
+docID = 11 score = 0.38248122569922915
+docID = 17 score = 0.3684081533002528
+docID = 126 score = 0.2718369600457466
+docID = 83 score = 0.2581513600510846
+docID = 137 score = 0.13442845526017833
+docID = 176 score = 0.12071315360379622
+docID = 181 score = 0.10471305800749098
+docID = 18 score = 0.09967195746678303
+docID = 51 score = 0.09630410301924738
+docID = 130 score = 0.09271357519586801
+docID = 190 score = 0.0900922638437546
+docID = 24 score = 0.08984893543446609
+docID = 16 score = 0.08975205711098992
+docID = 173 score = 0.08423728377276941
+docID = 50 score = 0.08212004862256572
+docID = 188 score = 0.08044627606463073
+docID = 22 score = 0.07720511239123477
+docID = 40 score = 0.07628297105894613
+docID = 174 score = 0.07573265611224872
+docID = 138 score = 0.07486257238747807
+docID = 177 score = 0.07398320424733812
+docID = 19 score = 0.0727691916263183
+docID = 15 score = 0.07165816803145439
+docID = 9 score = 0.0706910320208507
+docID = 110 score = 0.0669978744914872
+docID = 139 score = 0.06627222182125975
+docID = 170 score = 0.06598988679910148
+docID = 70 score = 0.06567083957973273
+docID = 14 score = 0.06471080794512556
+docID = 32 score = 0.06175080297010005
+docID = 84 score = 0.06171366292529642
+docID = 182 score = 0.06123831694527223
+docID = 73 score = 0.06119306549063606
+docID = 53 score = 0.060861762961520835
+docID = 64 score = 0.06063168675984251
+docID = 29 score = 0.05947063050262647
+docID = 169 score = 0.0581174278770015
+docID = 21 score = 0.05690052893790687
+docID = 71 score = 0.05610057647401731
+docID = 172 score = 0.05535097783770334
+docID = 61 score = 0.05484946364055081
+docID = 34 score = 0.0545620976169404
+docID = 63 score = 0.05443139032678555
+docID = 45 score = 0.054329501362946724
+docID = 180 score = 0.05407190098213829
+docID = 175 score = 0.052106025118672836
+docID = 171 score = 0.05125078871453668
+docID = 48 score = 0.0498430570160054
+docID = 49 score = 0.049339346816035634
+docID = 30 score = 0.04825044041156497
+docID = 68 score = 0.043522072837097164
+docID = 179 score = 0.04241182363638219
+docID = 57 score = 0.041520794471213554
+docID = 88 score = 0.03957791077329534
+docID = 187 score = 0.03833354243695249
+docID = 62 score = 0.03799528862207886
+docID = 35 score = 0.03697914252296768
+docID = 89 score = 0.03656849854784986
+docID = 54 score = 0.035770865614374536
+docID = 65 score = 0.03510361407874954
+docID = 20 score = 0.035003275738461306
+docID = 133 score = 0.03431831263665066
+docID = 28 score = 0.03200880177119477
+docID = 0 score = 0.03011751023116893
+docID = 55 score = 0.029063395928908747
+docID = 58 score = 0.028342711984569623
+docID = 99 score = 0.02834202583223816
+docID = 36 score = 0.02665137508044867
+docID = 13 score = 0.026344560909071668
+docID = 67 score = 0.02569121642533423
+docID = 136 score = 0.025147127129300194
+docID = 69 score = 0.025028049281233596
+docID = 118 score = 0.024687382032162326
+docID = 33 score = 0.024643077163580294
+docID = 132 score = 0.02431187469085845
+docID = 66 score = 0.023331897385131018
+docID = 101 score = 0.023271854177756478
+docID = 31 score = 0.023032096464085917
+docID = 60 score = 0.020153837926485105
+docID = 26 score = 0.019854640518660635
+docID = 56 score = 0.019782093147418595
+docID = 23 score = 0.016572274043676432
+docID = 59 score = 0.014448737582079162
+docID = 27 score = 0.00971777242809195
+docID = 25 score = 0.0065224352295578806
+docID = 37 score = 0.0016067871423529425
+docID = 11 score = 0.38248122569922915
+docID = 17 score = 0.3684081533002528
+docID = 126 score = 0.2718369600457466
+docID = 83 score = 0.2581513600510846
+docID = 137 score = 0.13442845526017833
+docID = 176 score = 0.12071315360379622
+docID = 181 score = 0.10471305800749098
+docID = 18 score = 0.09967195746678303
+docID = 51 score = 0.09630410301924738
+docID = 130 score = 0.09271357519586801
+docID = 190 score = 0.0900922638437546
+docID = 24 score = 0.08984893543446609
+docID = 16 score = 0.08975205711098992
+docID = 173 score = 0.08423728377276941
+docID = 50 score = 0.08212004862256572
+docID = 188 score = 0.08044627606463073
+docID = 22 score = 0.07720511239123477
+docID = 40 score = 0.07628297105894613
+docID = 174 score = 0.07573265611224872
+docID = 138 score = 0.07486257238747807
+docID = 177 score = 0.07398320424733812
+docID = 19 score = 0.0727691916263183
+docID = 15 score = 0.07165816803145439
+docID = 9 score = 0.0706910320208507
+docID = 110 score = 0.0669978744914872
+docID = 139 score = 0.06627222182125975
+docID = 170 score = 0.06598988679910148
+docID = 70 score = 0.06567083957973273
+docID = 14 score = 0.06471080794512556
+docID = 32 score = 0.06175080297010005
+docID = 84 score = 0.06171366292529642
+docID = 182 score = 0.06123831694527223
+docID = 73 score = 0.06119306549063606
+docID = 53 score = 0.060861762961520835
+docID = 64 score = 0.06063168675984251
+docID = 29 score = 0.05947063050262647
+docID = 169 score = 0.0581174278770015
+docID = 21 score = 0.05690052893790687
+docID = 71 score = 0.05610057647401731
+docID = 172 score = 0.05535097783770334
+docID = 61 score = 0.05484946364055081
+docID = 34 score = 0.0545620976169404
+docID = 63 score = 0.05443139032678555
+docID = 45 score = 0.054329501362946724
+docID = 180 score = 0.05407190098213829
+docID = 175 score = 0.052106025118672836
+docID = 171 score = 0.05125078871453668
+docID = 48 score = 0.0498430570160054
+docID = 49 score = 0.049339346816035634
+docID = 30 score = 0.04825044041156497
+docID = 68 score = 0.043522072837097164
+docID = 179 score = 0.04241182363638219
+docID = 57 score = 0.041520794471213554
+docID = 88 score = 0.03957791077329534
+docID = 187 score = 0.03833354243695249
+docID = 62 score = 0.03799528862207886
+docID = 35 score = 0.03697914252296768
+docID = 89 score = 0.03656849854784986
+docID = 54 score = 0.035770865614374536
+docID = 65 score = 0.03510361407874954
+docID = 20 score = 0.035003275738461306
+docID = 133 score = 0.03431831263665066
+docID = 28 score = 0.03200880177119477
+docID = 0 score = 0.03011751023116893
+docID = 55 score = 0.029063395928908747
+docID = 58 score = 0.028342711984569623
+docID = 99 score = 0.02834202583223816
+docID = 36 score = 0.02665137508044867
+docID = 13 score = 0.026344560909071668
+docID = 67 score = 0.02569121642533423
+docID = 136 score = 0.025147127129300194
+docID = 69 score = 0.025028049281233596
+docID = 118 score = 0.024687382032162326
+docID = 33 score = 0.024643077163580294
+docID = 132 score = 0.02431187469085845
+docID = 66 score = 0.023331897385131018
+docID = 101 score = 0.023271854177756478
+docID = 31 score = 0.023032096464085917
+docID = 60 score = 0.020153837926485105
+docID = 26 score = 0.019854640518660635
+docID = 56 score = 0.019782093147418595
+docID = 23 score = 0.016572274043676432
+docID = 59 score = 0.014448737582079162
+docID = 27 score = 0.00971777242809195
+docID = 25 score = 0.0065224352295578806
+docID = 37 score = 0.0016067871423529425
+Database Closed!!!
+docID = 11 score = 0.38248122569922915
+docID = 17 score = 0.3684081533002528
+docID = 126 score = 0.2718369600457466
+docID = 83 score = 0.2581513600510846
+docID = 137 score = 0.13442845526017833
+docID = 176 score = 0.12071315360379622
+docID = 181 score = 0.10471305800749098
+docID = 18 score = 0.09967195746678303
+docID = 51 score = 0.09630410301924738
+docID = 130 score = 0.09271357519586801
+docID = 190 score = 0.0900922638437546
+docID = 24 score = 0.08984893543446609
+docID = 16 score = 0.08975205711098992
+docID = 173 score = 0.08423728377276941
+docID = 50 score = 0.08212004862256572
+docID = 188 score = 0.08044627606463073
+docID = 22 score = 0.07720511239123477
+docID = 40 score = 0.07628297105894613
+docID = 174 score = 0.07573265611224872
+docID = 138 score = 0.07486257238747807
+docID = 177 score = 0.07398320424733812
+docID = 19 score = 0.0727691916263183
+docID = 15 score = 0.07165816803145439
+docID = 9 score = 0.0706910320208507
+docID = 110 score = 0.0669978744914872
+docID = 139 score = 0.06627222182125975
+docID = 170 score = 0.06598988679910148
+docID = 70 score = 0.06567083957973273
+docID = 14 score = 0.06471080794512556
+docID = 32 score = 0.06175080297010005
+docID = 84 score = 0.06171366292529642
+docID = 182 score = 0.06123831694527223
+docID = 73 score = 0.06119306549063606
+docID = 53 score = 0.060861762961520835
+docID = 64 score = 0.06063168675984251
+docID = 29 score = 0.05947063050262647
+docID = 169 score = 0.0581174278770015
+docID = 21 score = 0.05690052893790687
+docID = 71 score = 0.05610057647401731
+docID = 172 score = 0.05535097783770334
+docID = 61 score = 0.05484946364055081
+docID = 34 score = 0.0545620976169404
+docID = 63 score = 0.05443139032678555
+docID = 45 score = 0.054329501362946724
+docID = 180 score = 0.05407190098213829
+docID = 175 score = 0.052106025118672836
+docID = 171 score = 0.05125078871453668
+docID = 48 score = 0.0498430570160054
+docID = 49 score = 0.049339346816035634
+docID = 30 score = 0.04825044041156497
+docID = 68 score = 0.043522072837097164
+docID = 179 score = 0.04241182363638219
+docID = 57 score = 0.041520794471213554
+docID = 88 score = 0.03957791077329534
+docID = 187 score = 0.03833354243695249
+docID = 62 score = 0.03799528862207886
+docID = 35 score = 0.03697914252296768
+docID = 89 score = 0.03656849854784986
+docID = 54 score = 0.035770865614374536
+docID = 65 score = 0.03510361407874954
+docID = 20 score = 0.035003275738461306
+docID = 133 score = 0.03431831263665066
+docID = 28 score = 0.03200880177119477
+docID = 0 score = 0.03011751023116893
+docID = 55 score = 0.029063395928908747
+docID = 58 score = 0.028342711984569623
+docID = 99 score = 0.02834202583223816
+docID = 36 score = 0.02665137508044867
+docID = 13 score = 0.026344560909071668
+docID = 67 score = 0.02569121642533423
+docID = 136 score = 0.025147127129300194
+docID = 69 score = 0.025028049281233596
+docID = 118 score = 0.024687382032162326
+docID = 33 score = 0.024643077163580294
+docID = 132 score = 0.02431187469085845
+docID = 66 score = 0.023331897385131018
+docID = 101 score = 0.023271854177756478
+docID = 31 score = 0.023032096464085917
+docID = 60 score = 0.020153837926485105
+docID = 26 score = 0.019854640518660635
+docID = 56 score = 0.019782093147418595
+docID = 23 score = 0.016572274043676432
+docID = 59 score = 0.014448737582079162
+docID = 27 score = 0.00971777242809195
+docID = 25 score = 0.0065224352295578806
+docID = 37 score = 0.0016067871423529425
+Database Closed!!!
+docID = 11 score = 0.38248122569922915
+docID = 17 score = 0.3684081533002528
+docID = 126 score = 0.2718369600457466
+docID = 83 score = 0.2581513600510846
+docID = 137 score = 0.13442845526017833
+docID = 176 score = 0.12071315360379622
+docID = 181 score = 0.10471305800749098
+docID = 18 score = 0.09967195746678303
+docID = 51 score = 0.09630410301924738
+docID = 130 score = 0.09271357519586801
+docID = 190 score = 0.0900922638437546
+docID = 24 score = 0.08984893543446609
+docID = 16 score = 0.08975205711098992
+docID = 173 score = 0.08423728377276941
+docID = 50 score = 0.08212004862256572
+docID = 188 score = 0.08044627606463073
+docID = 22 score = 0.07720511239123477
+docID = 40 score = 0.07628297105894613
+docID = 174 score = 0.07573265611224872
+docID = 138 score = 0.07486257238747807
+docID = 177 score = 0.07398320424733812
+docID = 19 score = 0.0727691916263183
+docID = 15 score = 0.07165816803145439
+docID = 9 score = 0.0706910320208507
+docID = 110 score = 0.0669978744914872
+docID = 139 score = 0.06627222182125975
+docID = 170 score = 0.06598988679910148
+docID = 70 score = 0.06567083957973273
+docID = 14 score = 0.06471080794512556
+docID = 32 score = 0.06175080297010005
+docID = 84 score = 0.06171366292529642
+docID = 182 score = 0.06123831694527223
+docID = 73 score = 0.06119306549063606
+docID = 53 score = 0.060861762961520835
+docID = 64 score = 0.06063168675984251
+docID = 29 score = 0.05947063050262647
+docID = 169 score = 0.0581174278770015
+docID = 21 score = 0.05690052893790687
+docID = 71 score = 0.05610057647401731
+docID = 172 score = 0.05535097783770334
+docID = 61 score = 0.05484946364055081
+docID = 34 score = 0.0545620976169404
+docID = 63 score = 0.05443139032678555
+docID = 45 score = 0.054329501362946724
+docID = 180 score = 0.05407190098213829
+docID = 175 score = 0.052106025118672836
+docID = 171 score = 0.05125078871453668
+docID = 48 score = 0.0498430570160054
+docID = 49 score = 0.049339346816035634
+docID = 30 score = 0.04825044041156497
+docID = 68 score = 0.043522072837097164
+docID = 179 score = 0.04241182363638219
+docID = 57 score = 0.041520794471213554
+docID = 88 score = 0.03957791077329534
+docID = 187 score = 0.03833354243695249
+docID = 62 score = 0.03799528862207886
+docID = 35 score = 0.03697914252296768
+docID = 89 score = 0.03656849854784986
+docID = 54 score = 0.035770865614374536
+docID = 65 score = 0.03510361407874954
+docID = 20 score = 0.035003275738461306
+docID = 133 score = 0.03431831263665066
+docID = 28 score = 0.03200880177119477
+docID = 0 score = 0.03011751023116893
+docID = 55 score = 0.029063395928908747
+docID = 58 score = 0.028342711984569623
+docID = 99 score = 0.02834202583223816
+docID = 36 score = 0.02665137508044867
+docID = 13 score = 0.026344560909071668
+docID = 67 score = 0.02569121642533423
+docID = 136 score = 0.025147127129300194
+docID = 69 score = 0.025028049281233596
+docID = 118 score = 0.024687382032162326
+docID = 33 score = 0.024643077163580294
+docID = 132 score = 0.02431187469085845
+docID = 66 score = 0.023331897385131018
+docID = 101 score = 0.023271854177756478
+docID = 31 score = 0.023032096464085917
+docID = 60 score = 0.020153837926485105
+docID = 26 score = 0.019854640518660635
+docID = 56 score = 0.019782093147418595
+docID = 23 score = 0.016572274043676432
+docID = 59 score = 0.014448737582079162
+docID = 27 score = 0.00971777242809195
+docID = 25 score = 0.0065224352295578806
+docID = 37 score = 0.0016067871423529425
+Database Closed!!!
+docID = 11 score = 0.38248122569922915
+docID = 17 score = 0.3684081533002528
+docID = 126 score = 0.2718369600457466
+docID = 83 score = 0.2581513600510846
+docID = 137 score = 0.13442845526017833
+docID = 176 score = 0.12071315360379622
+docID = 181 score = 0.10471305800749098
+docID = 18 score = 0.09967195746678303
+docID = 51 score = 0.09630410301924738
+docID = 130 score = 0.09271357519586801
+docID = 190 score = 0.0900922638437546
+docID = 24 score = 0.08984893543446609
+docID = 16 score = 0.08975205711098992
+docID = 173 score = 0.08423728377276941
+docID = 50 score = 0.08212004862256572
+docID = 188 score = 0.08044627606463073
+docID = 22 score = 0.07720511239123477
+docID = 40 score = 0.07628297105894613
+docID = 174 score = 0.07573265611224872
+docID = 138 score = 0.07486257238747807
+docID = 177 score = 0.07398320424733812
+docID = 19 score = 0.0727691916263183
+docID = 15 score = 0.07165816803145439
+docID = 9 score = 0.0706910320208507
+docID = 110 score = 0.0669978744914872
+docID = 139 score = 0.06627222182125975
+docID = 170 score = 0.06598988679910148
+docID = 70 score = 0.06567083957973273
+docID = 14 score = 0.06471080794512556
+docID = 32 score = 0.06175080297010005
+docID = 84 score = 0.06171366292529642
+docID = 182 score = 0.06123831694527223
+docID = 73 score = 0.06119306549063606
+docID = 53 score = 0.060861762961520835
+docID = 64 score = 0.06063168675984251
+docID = 29 score = 0.05947063050262647
+docID = 169 score = 0.0581174278770015
+docID = 21 score = 0.05690052893790687
+docID = 71 score = 0.05610057647401731
+docID = 172 score = 0.05535097783770334
+docID = 61 score = 0.05484946364055081
+docID = 34 score = 0.0545620976169404
+docID = 63 score = 0.05443139032678555
+docID = 45 score = 0.054329501362946724
+docID = 180 score = 0.05407190098213829
+docID = 175 score = 0.052106025118672836
+docID = 171 score = 0.05125078871453668
+docID = 48 score = 0.0498430570160054
+docID = 49 score = 0.049339346816035634
+docID = 30 score = 0.04825044041156497
+docID = 68 score = 0.043522072837097164
+docID = 179 score = 0.04241182363638219
+docID = 57 score = 0.041520794471213554
+docID = 88 score = 0.03957791077329534
+docID = 187 score = 0.03833354243695249
+docID = 62 score = 0.03799528862207886
+docID = 35 score = 0.03697914252296768
+docID = 89 score = 0.03656849854784986
+docID = 54 score = 0.035770865614374536
+docID = 65 score = 0.03510361407874954
+docID = 20 score = 0.035003275738461306
+docID = 133 score = 0.03431831263665066
+docID = 28 score = 0.03200880177119477
+docID = 0 score = 0.03011751023116893
+docID = 55 score = 0.029063395928908747
+docID = 58 score = 0.028342711984569623
+docID = 99 score = 0.02834202583223816
+docID = 36 score = 0.02665137508044867
+docID = 13 score = 0.026344560909071668
+docID = 67 score = 0.02569121642533423
+docID = 136 score = 0.025147127129300194
+docID = 69 score = 0.025028049281233596
+docID = 118 score = 0.024687382032162326
+docID = 33 score = 0.024643077163580294
+docID = 132 score = 0.02431187469085845
+docID = 66 score = 0.023331897385131018
+docID = 101 score = 0.023271854177756478
+docID = 31 score = 0.023032096464085917
+docID = 60 score = 0.020153837926485105
+docID = 26 score = 0.019854640518660635
+docID = 56 score = 0.019782093147418595
+docID = 23 score = 0.016572274043676432
+docID = 59 score = 0.014448737582079162
+docID = 27 score = 0.00971777242809195
+docID = 25 score = 0.0065224352295578806
+docID = 37 score = 0.0016067871423529425
+Database Closed!!!
