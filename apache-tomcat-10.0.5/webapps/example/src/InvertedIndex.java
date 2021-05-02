@@ -85,7 +85,6 @@ public class InvertedIndex {
 		this.metadatadb.close();
 		this.parentchilddb.close();
 		this.pagerankdb.close();
-		System.out.println("Database Closed!!!");
 	}
 
 	// ========== Document Mapping Part ==========
@@ -442,8 +441,6 @@ public class InvertedIndex {
 	// return ranking based on cosine similarity
 	public Map<String, Double> rankingAlgorithm(String query) throws RocksDBException {
 		// docID, score key-value pair for ranking
-		double sim_weight = 0.8;
-		double pr_weight = 1 - sim_weight;
 		int N = this.getNumOfDoc();
 
 		Map<String, Double> ranking;
@@ -483,10 +480,7 @@ public class InvertedIndex {
 						// divide by |doc| and put cosSim into ranking
 						double docLength = maxTFAndDocLength[1];
 						double cosSim = termWeight / docLength;
-
-						// Calculate the weighted score
-						double weighted_score = cosSim * sim_weight + getPageRankFromDB("doc" + s) * pr_weight;
-						ranking.put(s, ranking.get(s) + weighted_score);
+						ranking.put(s, ranking.get(s) + cosSim);
 					}
 
 				}
