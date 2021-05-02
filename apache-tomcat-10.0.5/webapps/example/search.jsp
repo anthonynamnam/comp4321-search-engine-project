@@ -48,49 +48,60 @@
         </div>
     </nav>
     <!------------ Display Result ------------>
-	<div>
+    <div>
       <%
         StopStem stopstem = new StopStem("stopwords-en.txt"); // Put this file under bin/ folder since it is the working folder at the moment.
+        String query = "";
         if(request.getParameter("userInput")!=null) {
-        	String query = request.getParameter("userInput");
+        	query = request.getParameter("userInput");
 			out.println("<div> <br><br><br> Your input: "+ query + "</div>");
 			out.println("<div> Stem: " + stopstem.stem(query)  + "</div>");
 		} else {
 			out.println("You input nothing.");
 		}                
 
-        String path = "../webapps/example/db/doc";
-        DbHandler handler = new DbHandler(path);
+        // String path = "../webapps/example/db/doc";
+        // DbHandler handler = new DbHandler(path);
         // You will see a newly created rocksdb called database under bin/ folder.
-        out.println("<div>" + handler.sayHi() + " Successfully use database handler." + "</div>");
+        out.println("<div> Successfully use database handler." + "</div>");
         
         // remember to close database
-        // out.println("<div>" + handler.getAllDocID() + "</div>");
         // handler.close();
         
+        InvertedIndex inv = new InvertedIndex();
+        Map<String, Double> result = new HashMap<String, Double>();
+        
+        inv.openAllDB();
+        inv.sayHaHa(query);
+        result = inv.rankingAlgorithm(query);
+        //for(Map.Entry<String, Double> entry : result.entrySet()){
+        //    out.println("<div>" + "docID = " + entry.getKey() + " score = " + entry.getValue() + "</div>");
+        //}
+        inv.closeAllDB();
       %>
-      
-
+    
     </div>
     
         <header class=" text-white d-flex"
-            style="/background-image: url('./assets/img/header.jpg');/height: 100vh;">
+            style="/*background-image: url('./assets/img/header.jpg');*/height: 100vh;">
             <div class="container p-0">
                 <div class="col-lg mx-auto resultList">
-                    <div class="row">
-                        <div class="col">
-                            <div class="card resultCard">
-                                <div class="card-body">
-                                    <h4 class="card-title">
-                                      Hello
-                                    </h4>
-                                    <h6 class="text-muted card-subtitle mb-2">Subtitle</h6>
-                                    <p class="card-text">Search text goes here</p><a class="card-link"
-                                        href="#">Link</a><a class="card-link" href="#">Link</a>
+                    <% for(Map.Entry<String, Double> entry : result.entrySet()){ %>
+                        <div class="row">
+                            <div class="col">
+                                <div class="card resultCard">
+                                    <div class="card-body">
+                                        <h4 class="card-title">
+                                            DocID: <% out.println(entry.getKey()); %>
+                                        </h4>
+                                        <h6 class="text-muted card-subtitle mb-2">Subtitle</h6>
+                                        <p class="card-text">Score: <% out.println(entry.getValue()); %></p><a class="card-link"
+                                            href="#">Link</a><a class="card-link" href="#">Link</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <% } %>
                 </div>
             </div>
         </header>

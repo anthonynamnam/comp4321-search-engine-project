@@ -374,7 +374,6 @@ public class Crawler {
 			try {
 				index.addForwardIndex(url, entry.getKey(), entry.getValue());
 			} catch (RocksDBException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -390,10 +389,7 @@ public class Crawler {
 			// a static method that loads the RocksDB C++ library
 			RocksDB.loadLibrary();
 
-			String path = "db";
-
-			index = new InvertedIndex(path);
-			// index.clearAll();
+			index = new InvertedIndex();
 			index.openAllDB();
 		} catch (RocksDBException e) {
 			System.err.println(e.toString());
@@ -481,7 +477,7 @@ public class Crawler {
 						Scanner input2 = new Scanner(System.in);
 						System.out.print("Please input your query: ");
 						String inputQuery = input2.nextLine();
-						index.rankingAlgorithm(inputQuery, 100);
+						index.rankingAlgorithm(inputQuery);
 					} catch (RocksDBException e) {
 						e.printStackTrace();
 					}
