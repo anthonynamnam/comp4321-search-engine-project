@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import static java.util.Collections.reverseOrder;
+
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -437,14 +439,6 @@ public class InvertedIndex {
 		return idf;
 	}
 
-	// Calculate Cosine Similarity
-	public double calculateCosineSimilarity(String docID, double termWeight, int queryLength) throws RocksDBException {
-		double innerProduct = termWeight;
-		double documentLength = calculateDocumentLengthByDocID(docID);
-		double cosSim = termWeight / Math.sqrt(documentLength);
-		return cosSim;
-	}
-
 	// return ranking based on cosine similarity
 	public Map<String, Double> rankingAlgorithm(String query, int N) throws RocksDBException {
 		// docID, score key-value pair for ranking
@@ -457,28 +451,35 @@ public class InvertedIndex {
 		// getInvertedIndex for all queries in a for loop
 		for (int i = 0; i < querySplit.length; i++) {
 			String queryInvInd = this.getInvertedIndexByWord(querySplit[i]);
-			// hello -> empty
 			// world -> doc0:2 doc16:1
 			if (!queryInvInd.equals("empty")) {
 				String[] invIndSplit = queryInvInd.split(" ");
 				// world -> [doc0:2, doc16:1]
 				for (int j = 0; j < invIndSplit.length; j++) {
+					// s = docID, just the number, doc that has at least a word in query
 					String s = invIndSplit[j].substring(invIndSplit[j].indexOf("c") + 1);
 					s = s.substring(0, s.indexOf(":"));
-					// s = docID, just the number
+					
+					// create docID key if not exist
 					if (!ranking.containsKey(s))
 						ranking.put(s, 0.0);
-					// s is now one docID (int) that has at least a word in query
-					// find s score and put into ranking array
+	
+					// find doc's cosine similarity with query and put into ranking array
 					String forwardList = this.getForwardByDocID(s);
 					if (forwardList.contains(querySplit[i])) {
-						// scoring
-						// calculate term weight of document terms here
-						double termWeight = (this.getTF(querySplit[i], s) * calculateIDF(querySplit[i], s, N));
-						System.out.println(querySplit[i]);
-						System.out.println(this.getTF(querySplit[i], s));
-						System.out.println(calculateIDF(querySplit[i], s, N));
-						ranking.put(s, ranking.get(s) + termWeight);
+						// calculate term weight of all document terms here
+						
+						// inner product with each word in query
+						double termFreq = getTF(querySplit[i], s);
+						double idf = calculateIDF(querySplit[i], s, N);
+						double[] maxTFAndDocLength = calculateDocVectorLength(s, forwardList, N);
+						double maxTF = maxTFAndDocLength[0];
+						double termWeight = termFreq * idf / maxTF;
+						
+						// divide by |doc| and put cosSim into ranking
+						double docLength = maxTFAndDocLength[1];
+						double cosSim = termWeight / docLength;
+						ranking.put(s, ranking.get(s) + cosSim);
 					}
 
 				}
@@ -494,6 +495,33 @@ public class InvertedIndex {
 			System.out.println("docID = " + entry.getKey() + " score = " + entry.getValue());
 		});
 		return sortedRanking;
+	}
+	
+	// calculate number of words (without uniqueness) for normalization
+	public double[] calculateDocVectorLength(String docID, String forwardList, int N) throws RocksDBException {
+		String[] wordNFreq = forwardList.split(" ");
+		double [] termWeights = new double[wordNFreq.length];
+		int maxTF = -100;
+		int index = 0;
+		// word:freq, calculate termWeight without maxTF normalization first
+		for(String pair : wordNFreq) {
+			String word = pair.substring(0, pair.lastIndexOf(":"));
+			int freq = Integer.parseInt(pair.substring(pair.lastIndexOf(":") + 1));
+			if(freq > maxTF) maxTF = freq;
+			double idf = calculateIDF(word, docID, N);
+			double termWeight = freq * idf;
+			termWeights[index++] = termWeight;
+		}	
+		//normalize and square all termWeights by maxTF
+		for(double weight : termWeights) {
+			weight /= maxTF;
+			weight *= weight;
+		}
+		double docLength = Math.sqrt(Arrays.stream(termWeights).sum());
+		double[] maxTFAndDocLength = new double[2];
+		maxTFAndDocLength[0] = maxTF;
+		maxTFAndDocLength[1] = docLength;
+		return maxTFAndDocLength;
 	}
 
 	// Delete All Inverted Index
@@ -592,20 +620,6 @@ public class InvertedIndex {
 		} else
 			result = "empty";
 		return result;
-	}
-
-	// calculate number of words (without uniqueness) for normalization
-	public int calculateDocumentLengthByDocID(String docID) throws RocksDBException {
-		int length = 0;
-		String forward_docID = getForwardByDocID(docID);
-		if (!forward_docID.equals("empty")) {
-			String[] word_and_freq_split = forward_docID.split(" ");
-			for (String wordnfreq : word_and_freq_split) {
-				int individual_freq = Integer.parseInt(wordnfreq.substring(wordnfreq.lastIndexOf(":") + 1));
-				length += individual_freq;
-			}
-		}
-		return length;
 	}
 
 	// Delete All Forward Index

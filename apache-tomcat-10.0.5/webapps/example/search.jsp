@@ -48,12 +48,12 @@
         </div>
     </nav>
     <!------------ Display Result ------------>
-    <div>
+	<div>
       <%
         StopStem stopstem = new StopStem("stopwords-en.txt"); // Put this file under bin/ folder since it is the working folder at the moment.
         if(request.getParameter("userInput")!=null) {
         	String query = request.getParameter("userInput");
-			out.println("<div> Your input: "+ query + "</div>");
+			out.println("<div> <br><br><br> Your input: "+ query + "</div>");
 			out.println("<div> Stem: " + stopstem.stem(query)  + "</div>");
 		} else {
 			out.println("You input nothing.");
@@ -66,7 +66,7 @@
         
         // remember to close database
         // out.println("<div>" + handler.getAllDocID() + "</div>");
-        handler.close();
+        // handler.close();
         
       %>
       
@@ -74,7 +74,7 @@
     </div>
     
         <header class=" text-white d-flex"
-            style="/*background-image: url('./assets/img/header.jpg');*/height: 100vh;">
+            style="/background-image: url('./assets/img/header.jpg');/height: 100vh;">
             <div class="container p-0">
                 <div class="col-lg mx-auto resultList">
                     <div class="row">
